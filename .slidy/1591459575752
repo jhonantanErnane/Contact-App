@@ -1,0 +1,4 @@
+lib/app/widgets/contact_list/contact_list_widget.dart
+test/app/widgets/contact_list/contact_list_widget_test.dart
+lib/app/widgets/contact_list/contact_list_controller.dart
+test/app/widgets/contact_list/contact_list_controller_test.dart
