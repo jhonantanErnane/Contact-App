@@ -4,7 +4,8 @@ import 'contact_controller.dart';
 
 class ContactPage extends StatefulWidget {
   final String title;
-  const ContactPage({Key key, this.title = "Contact"}) : super(key: key);
+  final int contactId;
+  const ContactPage({this.title = "Contact", this.contactId});
 
   @override
   _ContactPageState createState() => _ContactPageState();

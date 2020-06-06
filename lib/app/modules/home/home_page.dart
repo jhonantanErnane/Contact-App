@@ -1,5 +1,4 @@
 import 'package:contact_app/app/models/contact_model.dart';
-import 'package:contact_app/app/modules/contact/contact_page.dart';
 import 'package:contact_app/app/widgets/contact_list/contact_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -92,7 +91,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           // ),
           ),
       body: ContactListWidget(
-        contacts: List<ContactModel>(),
+        contacts: List<ContactModel>()
+          ..add(ContactModel(
+              name: 'jhonantan',
+              email: 'jhonsoad@gmail.com',
+              nickName: 'jhon',
+              phoneNumber: '(31)99999-9999')),
       ),
       // StreamBuilder(
       //   builder: (context, snapshot) {
@@ -124,10 +128,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ContactPage()),
-          );
+          Modular.to.pushNamed('contacts/add');
         },
       ),
     );
