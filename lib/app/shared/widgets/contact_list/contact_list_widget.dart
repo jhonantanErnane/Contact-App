@@ -1,7 +1,6 @@
-import 'package:contact_app/app/models/contact_model.dart';
-import 'package:contact_app/app/modules/about/about_page.dart';
-import 'package:contact_app/app/modules/contact/contact_page.dart';
+import 'package:contact_app/app/shared/models/contact_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class ContactListWidget extends StatelessWidget {
   Offset _tapPosition;
@@ -37,15 +36,8 @@ class ContactListWidget extends StatelessWidget {
                       "Editar",
                       style: TextStyle(fontSize: 16),
                     ),
-                    onPressed: () {
-                      // bloc.setContact(contact);
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        // MaterialPageRoute(builder: (context) => EditPage()),
-                        MaterialPageRoute(builder: (context) => ContactPage()),
-                      );
-                    },
+                    onPressed: () => Modular.to
+                        .pushNamed('/contacts/edit', arguments: contact),
                   ),
                 ),
                 PopupMenuItem(
@@ -120,12 +112,7 @@ class ContactListWidget extends StatelessWidget {
         ),
         SizedBox(height: 20),
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ContactPage()),
-            );
-          },
+          onTap: () => Modular.to.pushNamed('/contacts/add'),
           child: Text(
             "ADICIONAR CONTATO",
             style: TextStyle(
@@ -137,12 +124,7 @@ class ContactListWidget extends StatelessWidget {
         ),
         SizedBox(height: 20),
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AboutPage()),
-            );
-          },
+          onTap: () => Modular.to.pushNamed('/about'),
           child: Text(
             "SOBRE",
             style: TextStyle(

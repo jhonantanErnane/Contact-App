@@ -1,5 +1,5 @@
 import 'package:contact_app/app/modules/home/home_controller.dart';
-import 'package:contact_app/app/widgets/contact_list/contact_list_controller.dart';
+import 'package:contact_app/app/shared/widgets/contact_list/contact_list_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:contact_app/app/modules/home/home_page.dart';
 

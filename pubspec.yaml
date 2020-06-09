@@ -21,7 +21,13 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_masked_text: 0.8.0
   dio: ^3.0.9
+  hive:
+  hive_flutter:
+    git:
+      url: git://github.com/hivedb/hive.git
+      path: hive_flutter
   flutter_mobx: ^1.1.0
   mobx: ^1.2.1
   flutter_modular: ^1.2.5+1
@@ -36,6 +42,11 @@ dev_dependencies:
   mockito: ^4.1.1
   mobx_codegen: ^1.1.0
   build_runner: ^1.10.0
+  hive_generator:
+    git:
+      url: git://github.com/hivedb/hive.git
+      path: hive_generator
+
   flutter_test:
     sdk: flutter
 
@@ -51,8 +62,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
