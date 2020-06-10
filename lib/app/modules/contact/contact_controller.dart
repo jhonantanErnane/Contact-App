@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../shared/repositories/repository_interface.dart';
@@ -15,10 +15,11 @@ class ContactController = _ContactControllerBase with _$ContactController;
 
 abstract class _ContactControllerBase with Store {
   final _storage = Modular.get<ILocalRepository>();
-  
+  final AddEditFormErrorState formError = AddEditFormErrorState();
+
   @observable
   String name = '';
-  
+
   @observable
   dynamic photo;
 
@@ -28,9 +29,8 @@ abstract class _ContactControllerBase with Store {
   @computed
   bool get canSaveContact => !formError.hasErrors;
 
-  final maskFormatter = new MaskedTextController(mask: '(00) 00000-0000');
-
-  final AddEditFormErrorState formError = AddEditFormErrorState();
+  final maskFormatter = new MaskTextInputFormatter(
+      mask: '(##) #####-####', filter: {"#": RegExp(r'[0-9]')});
 
   List<ReactionDisposer> _disposers;
 
@@ -61,7 +61,8 @@ abstract class _ContactControllerBase with Store {
     // print(phone);
     bool _hasError = false;
     String _msg;
-    if (maskFormatter.text.isEmpty) {
+
+    if (!maskFormatter.isFill()) {
       _msg = 'Preencha o telefone';
       _hasError = true;
     } else if (phone == null || phone.isEmpty) {
@@ -88,7 +89,7 @@ abstract class _ContactControllerBase with Store {
     formError.photo = GenericFormField(hasError: _hasError, msg: _msg);
   }
 
-@action
+  @action
   void saveContact() {
     try {
       String base64Image = '';
@@ -109,7 +110,7 @@ abstract class _ContactControllerBase with Store {
       print(e.toString());
     }
   }
-  
+
   void dispose() {
     print('dispose');
     if (_disposers != null) {
