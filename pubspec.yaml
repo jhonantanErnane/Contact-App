@@ -21,7 +21,9 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  flutter_masked_text: 0.8.0
+  image_picker: ^0.6.7+1
+  image_cropper: ^1.2.3
+  mask_text_input_formatter: 1.0.6
   dio: ^3.0.9
   hive:
   hive_flutter:

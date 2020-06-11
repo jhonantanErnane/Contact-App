@@ -1,9 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../shared/widgets/image_source_sheet/image_source_sheet_widget.dart';
 import 'contact_controller.dart';
 
 class ContactPage extends StatefulWidget {
@@ -26,10 +27,12 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
   @override
   Widget build(BuildContext context) {
-    Widget inputName = Observer(
+    final List<Widget> components = List<Widget>();
+
+    // name field
+    components.add(Observer(
       builder: (_) {
         return TextField(
-          autofocus: true,
           keyboardType: TextInputType.text,
           onChanged: (v) => controller.name = v,
           inputFormatters: [
@@ -41,92 +44,133 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
               errorText: controller.formError.name.msg),
         );
       },
-    );
+    ));
 
-    TextField inputNickName = TextField(
-      keyboardType: TextInputType.text,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(25),
-      ],
-      decoration: InputDecoration(
-        labelText: 'Apelido',
-        icon: Icon(Icons.person),
-      ),
-    );
-
-    TextField inputWork = TextField(
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(45),
-      ],
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Trabalho',
-        icon: Icon(Icons.work),
-      ),
-    );
-
-    TextField inputPhoneNumber = TextField(
-      controller: controller.maskFormatter,
-      keyboardType: TextInputType.phone,
-      onChanged: (v) => controller.phone = v,
-      decoration: InputDecoration(
-          labelText: "Telefone",
-          icon: Icon(Icons.phone),
-          errorText: controller.formError.phone.msg),
-    );
-
-    TextField inputEmail = TextField(
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(50),
-      ],
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: 'E-mail',
-        icon: Icon(Icons.email),
-      ),
-    );
-
-    TextField inputWebSite = TextField(
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(50),
-      ],
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Site da Web',
-        icon: Icon(Icons.web),
-      ),
-    );
-
-    final picture = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 120.0,
-          height: 120.0,
-          child: CircleAvatar(
-            child: Icon(
-              Icons.camera_alt,
-            ),
+    // nickName field
+    components.add(Observer(
+      builder: (_) {
+        return TextField(
+          keyboardType: TextInputType.text,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(25),
+          ],
+          decoration: InputDecoration(
+            labelText: 'Apelido',
+            icon: Icon(Icons.person),
           ),
-        ),
-      ],
-    );
+        );
+      },
+    ));
+
+    // work field
+    components.add(Observer(
+      builder: (_) {
+        return TextField(
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(45),
+          ],
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            labelText: 'Trabalho',
+            icon: Icon(Icons.work),
+          ),
+        );
+      },
+    ));
+
+    // phone field
+    components.add(Observer(
+      builder: (_) {
+        return TextField(
+          inputFormatters: [
+            controller.maskFormatter,
+          ],
+          keyboardType: TextInputType.phone,
+          onChanged: (v) => controller.phone = v,
+          decoration: InputDecoration(
+              labelText: "Telefone",
+              icon: Icon(Icons.phone),
+              errorText: controller.formError.phone.msg),
+        );
+      },
+    ));
+
+    // email field
+    components.add(Observer(
+      builder: (_) {
+        return TextField(
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(50),
+          ],
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            labelText: 'E-mail',
+            icon: Icon(Icons.email),
+          ),
+        );
+      },
+    ));
+
+    // website field
+    components.add(Observer(
+      builder: (_) {
+        return TextField(
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(50),
+          ],
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            labelText: 'Site da Web',
+            icon: Icon(Icons.web),
+          ),
+        );
+      },
+    ));
+
+    // picture field
+    components.insert(
+        0,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) => ImageSourceSheetWidget(
+                          onImageSelected: (image) {
+                            if (image != null) {
+                              controller.photo = image;
+                            }
+                            Modular.to.pop();
+                          },
+                        ));
+              },
+              child: Observer(builder: (BuildContext context) {
+                return Container(
+                    width: 100.0,
+                    height: 100.0,
+                    child: controller.photo != null
+                        ? CircleAvatar(
+                            backgroundImage: controller.photo is Uint8List
+                                ? MemoryImage(controller.photo)
+                                : FileImage(controller.photo),
+                          )
+                        : CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: AssetImage('images/profile.png'),
+                          ));
+              }),
+            ),
+          ],
+        ));
 
     ListView content = ListView(
       padding: EdgeInsets.all(20),
       children: <Widget>[
-        SizedBox(height: 20),
-        picture,
         Column(
-          children: <Widget>[
-            inputName,
-            inputNickName,
-            inputWork,
-            inputPhoneNumber,
-            inputEmail,
-            inputWebSite,
-          ],
+          children: components,
         ),
       ],
     );
@@ -139,16 +183,19 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
         ),
         title: Text("Criar novo contato"),
         actions: <Widget>[
-          Container(
-            width: 80,
-            child: IconButton(
-                icon: Text(
-                  'SALVAR',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onPressed:
-                    !controller.canSaveContact ? null : controller.saveContact),
-          )
+          Observer(
+            builder: (_) {
+              return FlatButton(
+                  child: Text(
+                    'SALVAR',
+                  ),
+                  disabledTextColor: Colors.white60,
+                  textColor: Colors.white,
+                  onPressed: !controller.canSaveContact
+                      ? null
+                      : controller.saveContact);
+            },
+          ),
         ],
       ),
       body: content,

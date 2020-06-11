@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:contact_app/app/shared/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -16,6 +17,11 @@ class ContactListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+    if (contacts == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     if (contacts.length == 0) {
       return column(context);
     }
@@ -64,6 +70,9 @@ class ContactListWidget extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
               leading: CircleAvatar(
+                backgroundImage: MemoryImage(
+                  base64Decode(contact.photo),
+                ),
                 child: Text(
                   contact.name.substring(0, 1).toUpperCase(),
                   style: TextStyle(fontSize: 26, color: Colors.white60),
