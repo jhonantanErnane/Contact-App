@@ -1,7 +1,8 @@
-import 'package:contact_app/app/shared/models/contact_model.dart';
-import 'package:contact_app/app/shared/widgets/contact_list/contact_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../shared/widgets/contact_list/contact_list_widget.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -90,15 +91,11 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           //   },
           // ),
           ),
-      body: ContactListWidget(
-        contacts: List<ContactModel>()
-          // ..add(ContactModel(
-          //     name: 'jhonantan',
-          //     email: 'jhonsoad@gmail.com',
-          //     nickName: 'jhon',
-          //     phoneNumber: '(31)99999-9999')
-              // ),
-      ),
+      body: Observer(builder: (_) {
+        return ContactListWidget(
+          contacts: controller.contacts,
+        );
+      }),
       // StreamBuilder(
       //   builder: (context, snapshot) {
       //     if (!snapshot.hasData) {
