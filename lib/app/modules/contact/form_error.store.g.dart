@@ -17,36 +17,6 @@ mixin _$AddEditFormErrorState on _AddEditFormErrorState, Store {
               name: '_AddEditFormErrorState.hasErrors'))
           .value;
 
-  final _$nameAtom = Atom(name: '_AddEditFormErrorState.name');
-
-  @override
-  GenericFormField get name {
-    _$nameAtom.reportRead();
-    return super.name;
-  }
-
-  @override
-  set name(GenericFormField value) {
-    _$nameAtom.reportWrite(value, super.name, () {
-      super.name = value;
-    });
-  }
-
-  final _$phoneAtom = Atom(name: '_AddEditFormErrorState.phone');
-
-  @override
-  GenericFormField get phone {
-    _$phoneAtom.reportRead();
-    return super.phone;
-  }
-
-  @override
-  set phone(GenericFormField value) {
-    _$phoneAtom.reportWrite(value, super.phone, () {
-      super.phone = value;
-    });
-  }
-
   final _$photoAtom = Atom(name: '_AddEditFormErrorState.photo');
 
   @override
@@ -65,8 +35,6 @@ mixin _$AddEditFormErrorState on _AddEditFormErrorState, Store {
   @override
   String toString() {
     return '''
-name: ${name},
-phone: ${phone},
 photo: ${photo},
 hasErrors: ${hasErrors}
     ''';

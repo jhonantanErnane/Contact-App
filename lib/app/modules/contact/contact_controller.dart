@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:contact_app/app/modules/contact/contact_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../shared/repositories/repository_interface.dart';
 import '../../shared/models/contact_model.dart';
-import '../../modules/contact/form_error.store.dart';
-import '../../shared/models/field.dart';
 
 part 'contact_controller.g.dart';
 
@@ -16,10 +14,14 @@ class ContactController = _ContactControllerBase with _$ContactController;
 
 abstract class _ContactControllerBase with Store {
   final _storage = Modular.get<ILocalRepository>();
-  final AddEditFormErrorState formError = AddEditFormErrorState();
 
   @observable
-  String name = '';
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey flatKey = GlobalKey();
+
+  final TextEditingController _txName = TextEditingController();
+  final TextEditingController _txPhone = TextEditingController();
+  ContactModel contact = ContactModel();
 
   @observable
   String nickName = '';
@@ -36,110 +38,95 @@ abstract class _ContactControllerBase with Store {
   @observable
   dynamic photo;
 
-  @observable
-  String phone = '';
-
   @computed
-  bool get canSaveContact => !formError.hasErrors;
+  bool get canSaveContact => formKey?.currentState?.validate() ?? false;
+
+  TextEditingController get controllertxName => _txName;
+  TextEditingController get controllertxPhone => _txPhone;
 
   final maskFormatter = new MaskTextInputFormatter(
       mask: '(##) #####-####', filter: {"#": RegExp(r'[0-9]')});
 
-  List<ReactionDisposer> _disposers;
-
-  void setupValidations() {
+  Future<void> setupValidations() async {
     if (Modular.args.params != null) {
-      _getContact();
+      await _getContact();
     }
+  }
 
-    _disposers = [
-      reaction((_) => name, validateName),
-      reaction((_) => phone, validatePhone),
-      reaction((_) => photo, validatePhoto),
-    ];
+  Future<void> _getContact() async {
+    this.contact =
+        await _storage.getContact(int.parse(Modular.args.params['id']));
+    if (contact != null) setContact(contact);
   }
 
   @action
-  Future<void> _getContact() async {
-    ContactModel c =
-        await _storage.getContact(int.parse(Modular.args.params['id']));
-// setState(() {
-      
-//     });
-// _disposers.add(
-//   reaction((_) => photo, validatePhoto)
-// );
-    name = c.name;
+  void setContact(ContactModel c) {
+    _txName.text = c.name;
+    _txPhone.text = c.phoneNumber;
+    maskFormatter.formatEditUpdate(
+        TextEditingValue(), TextEditingValue(text: _txPhone.text));
+    photo = c.photo;
+
     nickName = c.nickName;
     work = c.work;
     email = c.email;
     website = c.webSite;
-    photo = c.photo;
-    phone = c.phoneNumber;
-
   }
 
   @action
-  void validateName(String name) {
-    bool _hasError = false;
+  String validateName(String name) {
     String _msg;
     if (name == null || name.isEmpty) {
       _msg = 'Nome não pode ser vazio';
-      _hasError = true;
     } else {
       _msg = null;
-      _hasError = false;
     }
-    formError.name = GenericFormField(hasError: _hasError, msg: _msg);
+    return _msg;
   }
 
   @action
-  void validatePhone(String phone) {
-    // print(phone);
-    bool _hasError = false;
+  String validatePhone(String phone) {
     String _msg;
 
     if (!maskFormatter.isFill()) {
       _msg = 'Preencha o telefone';
-      _hasError = true;
     } else if (phone == null || phone.isEmpty) {
       _msg = 'Telefone não pode ser vazio';
-      _hasError = true;
     } else {
       _msg = null;
-      _hasError = false;
     }
-    formError.phone = GenericFormField(hasError: _hasError, msg: _msg);
+    return _msg;
   }
 
   @action
-  void validatePhoto(dynamic photo) {
-    bool _hasError = false;
+  String validatePhoto(dynamic photo) {
     String _msg;
     if (photo == null) {
       _msg = 'Por favor escolha uma foto';
-      _hasError = true;
     } else {
       _msg = null;
-      _hasError = false;
     }
-    formError.photo = GenericFormField(hasError: _hasError, msg: _msg);
+    return _msg;
   }
 
-  void saveContact() {
+  Future<void> saveContact() async {
     try {
       String base64Image = '';
       if (photo is File) {
         List<int> imageBytes = photo.readAsBytesSync();
-        // print(imageBytes);
         base64Image = base64Encode(imageBytes);
       } else {}
-      final contact = ContactModel(
-          name: name,
-          phoneNumber: maskFormatter.getUnmaskedText(),
-          photo: base64Image == '' ? photo : base64Image);
+      contact.name = _txName.text;
+      contact.phoneNumber = maskFormatter.getMaskedText();
+      contact.photo = base64Image == '' ? photo : base64Image;
+
       photo = base64Decode(base64Image);
-      _storage.addContact(contact);
+      if (contact.id == null) {
+        await _storage.addContact(contact);
+      } else {
+        await _storage.putContact(contact);
+      }
+
       Modular.to.pop();
     } catch (e) {
       print('ocorreu um erro ao salvar o contato');
@@ -147,12 +134,4 @@ abstract class _ContactControllerBase with Store {
     }
   }
 
-  void dispose() {
-    print('dispose');
-    if (_disposers != null) {
-      for (var item in _disposers) {
-        item();
-      }
-    }
-  }
 }

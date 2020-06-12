@@ -18,10 +18,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends ModularState<ContactPage, ContactController> {
   //use 'controller' variable to access controller
-  final TextEditingController _txName = TextEditingController();
   final TextEditingController _txNickName = TextEditingController();
   final TextEditingController _txWork = TextEditingController();
-  final TextEditingController _txPhone = TextEditingController();
   final TextEditingController _txEmail = TextEditingController();
   final TextEditingController _txWebsite = TextEditingController();
 
@@ -31,118 +29,88 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     controller.setupValidations();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> components = List<Widget>();
+
     // name field
-    components.add(Observer(
-      builder: (_) {
-    // _txName.text = controller.name;
-        return TextFormField(
-          initialValue: controller.name,
-          keyboardType: TextInputType.text,
-          onChanged: (v) => controller.name = v,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(45),
-          ],
-          decoration: InputDecoration(
-              labelText: 'Nome',
-              icon: Icon(Icons.person),
-              errorText: controller.formError.name.msg),
-        );
-      },
+    components.add(TextFormField(
+      controller: controller.controllertxName,
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
+      validator: controller.validateName,
+      decoration: InputDecoration(
+        labelText: 'Nome',
+        icon: Icon(Icons.person),
+      ),
     ));
 
     // nickName field
-    components.add(Observer(
-      builder: (_) {
-        _txNickName.text = controller.nickName;
-        return TextField(
-          controller: _txNickName,
-          keyboardType: TextInputType.text,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(25),
-          ],
-          decoration: InputDecoration(
-            labelText: 'Apelido',
-            icon: Icon(Icons.person),
-          ),
-        );
-      },
+    components.add(TextField(
+      controller: _txNickName,
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(25),
+      ],
+      decoration: InputDecoration(
+        labelText: 'Apelido',
+        icon: Icon(Icons.person),
+      ),
     ));
 
     // work field
-    components.add(Observer(
-      builder: (_) {
-        _txWork.text = controller.work;
-        return TextField(
-          controller: _txWork,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(45),
-          ],
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: 'Trabalho',
-            icon: Icon(Icons.work),
-          ),
-        );
-      },
+    components.add(TextField(
+      controller: _txWork,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'Trabalho',
+        icon: Icon(Icons.work),
+      ),
     ));
 
     // phone field
-    components.add(Observer(
-      builder: (_) {
-        _txPhone.text = controller.phone;
-        return TextField(
-          controller: _txPhone,
-          inputFormatters: [
-            controller.maskFormatter,
-          ],
-          keyboardType: TextInputType.phone,
-          onChanged: (v) => controller.phone = v,
-          decoration: InputDecoration(
-              labelText: "Telefone",
-              icon: Icon(Icons.phone),
-              errorText: controller.formError.phone.msg),
-        );
-      },
+    components.add(TextFormField(
+      controller: controller.controllertxPhone,
+      inputFormatters: [
+        controller.maskFormatter,
+      ],
+      keyboardType: TextInputType.phone,
+      validator: controller.validatePhone,
+      decoration: InputDecoration(
+        labelText: "Telefone",
+        icon: Icon(Icons.phone),
+      ),
     ));
 
     // email field
-    components.add(Observer(
-      builder: (_) {
-        _txEmail.text = controller.email;
-        return TextField(
-          controller: _txEmail,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(50),
-          ],
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            labelText: 'E-mail',
-            icon: Icon(Icons.email),
-          ),
-        );
-      },
+    components.add(TextField(
+      controller: _txEmail,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: 'E-mail',
+        icon: Icon(Icons.email),
+      ),
     ));
 
     // website field
-    components.add(Observer(
-      builder: (_) {
-        _txWebsite.text = controller.website;
-        return TextField(
-          controller: _txWebsite,
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(50),
-          ],
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            labelText: 'Site da Web',
-            icon: Icon(Icons.web),
-          ),
-        );
-      },
+    components.add(TextField(
+      controller: _txWebsite,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: 'Site da Web',
+        icon: Icon(Icons.web),
+      ),
     ));
 
     // picture field
@@ -173,7 +141,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
                         ? CircleAvatar(
                             backgroundImage: controller.photo is File
                                 ? FileImage(controller.photo)
-                                : MemoryImage(base64Decode(controller.photo)),
+                                : MemoryImage(controller.photo is String
+                                    ? base64Decode(controller.photo)
+                                    : controller.photo),
                           )
                         : CircleAvatar(
                             backgroundColor: Colors.transparent,
@@ -193,30 +163,35 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
       ],
     );
 
+    Form form =
+        Form(key: controller.formKey, autovalidate: true, child: content);
+
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Modular.to.pop(),
-        ),
-        title: Text("Criar novo contato"),
-        actions: <Widget>[
-          Observer(
-            builder: (_) {
-              return FlatButton(
-                  child: Text(
-                    'SALVAR',
-                  ),
-                  disabledTextColor: Colors.white60,
-                  textColor: Colors.white,
-                  onPressed: !controller.canSaveContact
-                      ? null
-                      : controller.saveContact);
-            },
+        appBar: AppBar(
+          key: controller.flatKey,
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () => Modular.to.pop(),
           ),
-        ],
-      ),
-      body: content,
-    );
+          title: Text("Criar novo contato"),
+          actions: <Widget>[
+            Observer(
+              builder: (_) {
+                return FlatButton(
+                    child: Text(
+                      'SALVAR',
+                    ),
+                    disabledTextColor: Colors.white60,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      if (controller.canSaveContact) {
+                        controller.saveContact();
+                      }
+                    });
+              },
+            ),
+          ],
+        ),
+        body: form);
   }
 }

@@ -17,18 +17,18 @@ mixin _$ContactController on _ContactControllerBase, Store {
               name: '_ContactControllerBase.canSaveContact'))
           .value;
 
-  final _$nameAtom = Atom(name: '_ContactControllerBase.name');
+  final _$formKeyAtom = Atom(name: '_ContactControllerBase.formKey');
 
   @override
-  String get name {
-    _$nameAtom.reportRead();
-    return super.name;
+  GlobalKey<FormState> get formKey {
+    _$formKeyAtom.reportRead();
+    return super.formKey;
   }
 
   @override
-  set name(String value) {
-    _$nameAtom.reportWrite(value, super.name, () {
-      super.name = value;
+  set formKey(GlobalKey<FormState> value) {
+    _$formKeyAtom.reportWrite(value, super.formKey, () {
+      super.formKey = value;
     });
   }
 
@@ -107,34 +107,22 @@ mixin _$ContactController on _ContactControllerBase, Store {
     });
   }
 
-  final _$phoneAtom = Atom(name: '_ContactControllerBase.phone');
-
-  @override
-  String get phone {
-    _$phoneAtom.reportRead();
-    return super.phone;
-  }
-
-  @override
-  set phone(String value) {
-    _$phoneAtom.reportWrite(value, super.phone, () {
-      super.phone = value;
-    });
-  }
-
-  final _$_getContactAsyncAction =
-      AsyncAction('_ContactControllerBase._getContact');
-
-  @override
-  Future<void> _getContact() {
-    return _$_getContactAsyncAction.run(() => super._getContact());
-  }
-
   final _$_ContactControllerBaseActionController =
       ActionController(name: '_ContactControllerBase');
 
   @override
-  void validateName(String name) {
+  void setContact(ContactModel c) {
+    final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
+        name: '_ContactControllerBase.setContact');
+    try {
+      return super.setContact(c);
+    } finally {
+      _$_ContactControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String validateName(String name) {
     final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
         name: '_ContactControllerBase.validateName');
     try {
@@ -145,7 +133,7 @@ mixin _$ContactController on _ContactControllerBase, Store {
   }
 
   @override
-  void validatePhone(String phone) {
+  String validatePhone(String phone) {
     final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
         name: '_ContactControllerBase.validatePhone');
     try {
@@ -156,7 +144,7 @@ mixin _$ContactController on _ContactControllerBase, Store {
   }
 
   @override
-  void validatePhoto(dynamic photo) {
+  String validatePhoto(dynamic photo) {
     final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
         name: '_ContactControllerBase.validatePhoto');
     try {
@@ -169,13 +157,12 @@ mixin _$ContactController on _ContactControllerBase, Store {
   @override
   String toString() {
     return '''
-name: ${name},
+formKey: ${formKey},
 nickName: ${nickName},
 work: ${work},
 email: ${email},
 website: ${website},
 photo: ${photo},
-phone: ${phone},
 canSaveContact: ${canSaveContact}
     ''';
   }
