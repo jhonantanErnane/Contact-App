@@ -30,7 +30,7 @@ class LocalStorageHive implements ILocalRepository {
   @override
   Future<void> delContacts() async {
     var boxContact = await _instance.future;
-    boxContact.delete(KEYBOX);
+    boxContact.deleteFromDisk();
   }
 
   @override

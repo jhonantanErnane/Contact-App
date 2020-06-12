@@ -71,10 +71,12 @@ class ContactListWidget extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
               leading: CircleAvatar(
-                  backgroundImage: MemoryImage(
-                    base64Decode(contact.photo),
-                  ),
-                  child: contact.photo == null
+                  backgroundImage: contact.photo != null
+                      ? MemoryImage(
+                          base64Decode(contact?.photo),
+                        )
+                      : null,
+                  child: contact.photo == null || contact.photo.isEmpty
                       ? Text(
                           contact.name.substring(0, 1).toUpperCase(),
                           style: TextStyle(fontSize: 26, color: Colors.white60),
