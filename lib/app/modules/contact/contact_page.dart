@@ -1,4 +1,5 @@
-import 'dart:typed_data';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,8 +10,7 @@ import 'contact_controller.dart';
 
 class ContactPage extends StatefulWidget {
   final String title;
-  final int contactId;
-  const ContactPage({this.title = "Contact", this.contactId});
+  const ContactPage({this.title = "Contact"});
 
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -18,6 +18,12 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends ModularState<ContactPage, ContactController> {
   //use 'controller' variable to access controller
+  final TextEditingController _txName = TextEditingController();
+  final TextEditingController _txNickName = TextEditingController();
+  final TextEditingController _txWork = TextEditingController();
+  final TextEditingController _txPhone = TextEditingController();
+  final TextEditingController _txEmail = TextEditingController();
+  final TextEditingController _txWebsite = TextEditingController();
 
   @override
   void initState() {
@@ -25,14 +31,16 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     controller.setupValidations();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> components = List<Widget>();
-
     // name field
     components.add(Observer(
       builder: (_) {
-        return TextField(
+    // _txName.text = controller.name;
+        return TextFormField(
+          initialValue: controller.name,
           keyboardType: TextInputType.text,
           onChanged: (v) => controller.name = v,
           inputFormatters: [
@@ -49,7 +57,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     // nickName field
     components.add(Observer(
       builder: (_) {
+        _txNickName.text = controller.nickName;
         return TextField(
+          controller: _txNickName,
           keyboardType: TextInputType.text,
           inputFormatters: [
             LengthLimitingTextInputFormatter(25),
@@ -65,7 +75,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     // work field
     components.add(Observer(
       builder: (_) {
+        _txWork.text = controller.work;
         return TextField(
+          controller: _txWork,
           inputFormatters: [
             LengthLimitingTextInputFormatter(45),
           ],
@@ -81,7 +93,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     // phone field
     components.add(Observer(
       builder: (_) {
+        _txPhone.text = controller.phone;
         return TextField(
+          controller: _txPhone,
           inputFormatters: [
             controller.maskFormatter,
           ],
@@ -98,7 +112,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     // email field
     components.add(Observer(
       builder: (_) {
+        _txEmail.text = controller.email;
         return TextField(
+          controller: _txEmail,
           inputFormatters: [
             LengthLimitingTextInputFormatter(50),
           ],
@@ -114,7 +130,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     // website field
     components.add(Observer(
       builder: (_) {
+        _txWebsite.text = controller.website;
         return TextField(
+          controller: _txWebsite,
           inputFormatters: [
             LengthLimitingTextInputFormatter(50),
           ],
@@ -153,9 +171,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
                     height: 100.0,
                     child: controller.photo != null
                         ? CircleAvatar(
-                            backgroundImage: controller.photo is Uint8List
-                                ? MemoryImage(controller.photo)
-                                : FileImage(controller.photo),
+                            backgroundImage: controller.photo is File
+                                ? FileImage(controller.photo)
+                                : MemoryImage(base64Decode(controller.photo)),
                           )
                         : CircleAvatar(
                             backgroundColor: Colors.transparent,

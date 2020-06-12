@@ -4,6 +4,7 @@ part 'contact_model.g.dart';
 
 @HiveType(typeId: 0)
 class ContactModel {
+  int id;
   @HiveField(1)
   String name;
   @HiveField(2)
@@ -24,6 +25,7 @@ class ContactModel {
   String created;
 
   ContactModel({
+    this.id,
     this.name,
     this.nickName,
     this.work,
@@ -36,6 +38,7 @@ class ContactModel {
   });
 
   ContactModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
     nickName = json['nickName'];
     work = json['work'];
@@ -49,6 +52,7 @@ class ContactModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['name'] = this.name;
     data['nickName'] = this.nickName;
     data['work'] = this.work;

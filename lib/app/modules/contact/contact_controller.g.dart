@@ -32,6 +32,66 @@ mixin _$ContactController on _ContactControllerBase, Store {
     });
   }
 
+  final _$nickNameAtom = Atom(name: '_ContactControllerBase.nickName');
+
+  @override
+  String get nickName {
+    _$nickNameAtom.reportRead();
+    return super.nickName;
+  }
+
+  @override
+  set nickName(String value) {
+    _$nickNameAtom.reportWrite(value, super.nickName, () {
+      super.nickName = value;
+    });
+  }
+
+  final _$workAtom = Atom(name: '_ContactControllerBase.work');
+
+  @override
+  String get work {
+    _$workAtom.reportRead();
+    return super.work;
+  }
+
+  @override
+  set work(String value) {
+    _$workAtom.reportWrite(value, super.work, () {
+      super.work = value;
+    });
+  }
+
+  final _$emailAtom = Atom(name: '_ContactControllerBase.email');
+
+  @override
+  String get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
+  final _$websiteAtom = Atom(name: '_ContactControllerBase.website');
+
+  @override
+  String get website {
+    _$websiteAtom.reportRead();
+    return super.website;
+  }
+
+  @override
+  set website(String value) {
+    _$websiteAtom.reportWrite(value, super.website, () {
+      super.website = value;
+    });
+  }
+
   final _$photoAtom = Atom(name: '_ContactControllerBase.photo');
 
   @override
@@ -60,6 +120,14 @@ mixin _$ContactController on _ContactControllerBase, Store {
     _$phoneAtom.reportWrite(value, super.phone, () {
       super.phone = value;
     });
+  }
+
+  final _$_getContactAsyncAction =
+      AsyncAction('_ContactControllerBase._getContact');
+
+  @override
+  Future<void> _getContact() {
+    return _$_getContactAsyncAction.run(() => super._getContact());
   }
 
   final _$_ContactControllerBaseActionController =
@@ -99,20 +167,13 @@ mixin _$ContactController on _ContactControllerBase, Store {
   }
 
   @override
-  void saveContact() {
-    final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
-        name: '_ContactControllerBase.saveContact');
-    try {
-      return super.saveContact();
-    } finally {
-      _$_ContactControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 name: ${name},
+nickName: ${nickName},
+work: ${work},
+email: ${email},
+website: ${website},
 photo: ${photo},
 phone: ${phone},
 canSaveContact: ${canSaveContact}

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:contact_app/app/modules/contact/contact_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
@@ -21,6 +22,18 @@ abstract class _ContactControllerBase with Store {
   String name = '';
 
   @observable
+  String nickName = '';
+
+  @observable
+  String work = '';
+
+  @observable
+  String email = '';
+
+  @observable
+  String website = '';
+
+  @observable
   dynamic photo;
 
   @observable
@@ -35,11 +48,35 @@ abstract class _ContactControllerBase with Store {
   List<ReactionDisposer> _disposers;
 
   void setupValidations() {
+    if (Modular.args.params != null) {
+      _getContact();
+    }
+
     _disposers = [
       reaction((_) => name, validateName),
       reaction((_) => phone, validatePhone),
       reaction((_) => photo, validatePhoto),
     ];
+  }
+
+  @action
+  Future<void> _getContact() async {
+    ContactModel c =
+        await _storage.getContact(int.parse(Modular.args.params['id']));
+// setState(() {
+      
+//     });
+// _disposers.add(
+//   reaction((_) => photo, validatePhoto)
+// );
+    name = c.name;
+    nickName = c.nickName;
+    work = c.work;
+    email = c.email;
+    website = c.webSite;
+    photo = c.photo;
+    phone = c.phoneNumber;
+
   }
 
   @action
@@ -89,7 +126,6 @@ abstract class _ContactControllerBase with Store {
     formError.photo = GenericFormField(hasError: _hasError, msg: _msg);
   }
 
-  @action
   void saveContact() {
     try {
       String base64Image = '';
@@ -100,7 +136,7 @@ abstract class _ContactControllerBase with Store {
       } else {}
       final contact = ContactModel(
           name: name,
-          phoneNumber: phone,
+          phoneNumber: maskFormatter.getUnmaskedText(),
           photo: base64Image == '' ? photo : base64Image);
       photo = base64Decode(base64Image);
       _storage.addContact(contact);

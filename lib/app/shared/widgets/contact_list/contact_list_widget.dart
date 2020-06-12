@@ -42,8 +42,9 @@ class ContactListWidget extends StatelessWidget {
                       "Editar",
                       style: TextStyle(fontSize: 16),
                     ),
-                    onPressed: () => Modular.to
-                        .pushNamed('/contacts/edit', arguments: contact),
+                    onPressed: () {
+                      Modular.to.pushNamed('/contacts/edit/${contact.id}');
+                    },
                   ),
                 ),
                 PopupMenuItem(
@@ -70,14 +71,15 @@ class ContactListWidget extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
               leading: CircleAvatar(
-                backgroundImage: MemoryImage(
-                  base64Decode(contact.photo),
-                ),
-                child: Text(
-                  contact.name.substring(0, 1).toUpperCase(),
-                  style: TextStyle(fontSize: 26, color: Colors.white60),
-                ),
-              ),
+                  backgroundImage: MemoryImage(
+                    base64Decode(contact.photo),
+                  ),
+                  child: contact.photo == null
+                      ? Text(
+                          contact.name.substring(0, 1).toUpperCase(),
+                          style: TextStyle(fontSize: 26, color: Colors.white60),
+                        )
+                      : null),
               trailing: contact.isFavorite == 1
                   ? Icon(Icons.star, color: Colors.indigo)
                   : Icon(Icons.star_border),
