@@ -5,10 +5,9 @@ import 'package:path_provider/path_provider.dart';
 
 import '../repository_interface.dart';
 
-
 class LocalStorageHive implements ILocalRepository {
-  static const KEYBOX = 'contactsList';
-  Completer<Box> _instance = Completer<Box>();
+  static const KEYBOX = 'contacts';
+  Completer<Box<ContactModel>> _instance = Completer<Box<ContactModel>>();
 
   LocalStorageHive() {
     _init();
@@ -18,7 +17,7 @@ class LocalStorageHive implements ILocalRepository {
     var dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
     Hive.registerAdapter<ContactModel>(ContactModelAdapter());
-    var boxContact = await Hive.openBox('contacts');
+    var boxContact = await Hive.openBox<ContactModel>(KEYBOX);
     _instance.complete(boxContact);
   }
 
@@ -38,12 +37,29 @@ class LocalStorageHive implements ILocalRepository {
   Future<List<ContactModel>> getAllContacts() async {
     var boxContact = await _instance.future;
     Map<dynamic, dynamic> raw = boxContact.toMap();
-    return raw.values.map<ContactModel>((c) => c).toList();
+    List<ContactModel> contacts = List<ContactModel>();
+    raw.forEach((key, value) {
+      value.id = key;
+      contacts.add(value);
+    });
+    return contacts;
   }
 
   @override
-  Future<void> putContact(List<ContactModel> contacts) async {
+  Future<ContactModel> getContact(int id) async {
     var boxContact = await _instance.future;
-    boxContact.put(KEYBOX, contacts);
+    return boxContact.getAt(id);
+  }
+
+  @override
+  Future<void> putContact(ContactModel contact) async {
+    var boxContact = await _instance.future;
+    boxContact.putAt(contact.id, contact);
+  }
+
+  @override
+  Future<void> deleteContact(int id) async {
+    var boxContact = await _instance.future;
+    boxContact.deleteAt(id);
   }
 }
