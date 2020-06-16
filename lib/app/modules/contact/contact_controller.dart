@@ -19,30 +19,20 @@ abstract class _ContactControllerBase with Store {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   GlobalKey flatKey = GlobalKey();
 
-  final TextEditingController _txName = TextEditingController();
-  final TextEditingController _txPhone = TextEditingController();
+  final TextEditingController txName = TextEditingController();
+  final TextEditingController txPhone = TextEditingController();
+  final TextEditingController txNickName = TextEditingController();
+  final TextEditingController txEmail = TextEditingController();
+  final TextEditingController txWork = TextEditingController();
+  final TextEditingController txWebsite = TextEditingController();
+
   ContactModel contact = ContactModel();
-
-  @observable
-  String nickName = '';
-
-  @observable
-  String work = '';
-
-  @observable
-  String email = '';
-
-  @observable
-  String website = '';
 
   @observable
   dynamic photo;
 
   @computed
   bool get canSaveContact => formKey?.currentState?.validate() ?? false;
-
-  TextEditingController get controllertxName => _txName;
-  TextEditingController get controllertxPhone => _txPhone;
 
   final maskFormatter = new MaskTextInputFormatter(
       mask: '(##) #####-####', filter: {"#": RegExp(r'[0-9]')});
@@ -61,16 +51,16 @@ abstract class _ContactControllerBase with Store {
 
   @action
   void setContact(ContactModel c) {
-    _txName.text = c.name;
-    _txPhone.text = c.phoneNumber;
+    txName.text = c.name;
+    txPhone.text = c.phoneNumber;
     maskFormatter.formatEditUpdate(
-        TextEditingValue(), TextEditingValue(text: _txPhone.text));
+        TextEditingValue(), TextEditingValue(text: txPhone.text));
     photo = c.photo;
 
-    nickName = c.nickName;
-    work = c.work;
-    email = c.email;
-    website = c.webSite;
+    txNickName.text = c.nickName;
+    txWork.text = c.work;
+    txEmail.text = c.email;
+    txWebsite.text = c.webSite;
   }
 
   @action
@@ -98,17 +88,6 @@ abstract class _ContactControllerBase with Store {
     return _msg;
   }
 
-  @action
-  String validatePhoto(dynamic photo) {
-    String _msg;
-    if (photo == null) {
-      _msg = 'Por favor escolha uma foto';
-    } else {
-      _msg = null;
-    }
-    return _msg;
-  }
-
   Future<void> saveContact() async {
     try {
       String base64Image = '';
@@ -116,7 +95,7 @@ abstract class _ContactControllerBase with Store {
         List<int> imageBytes = photo.readAsBytesSync();
         base64Image = base64Encode(imageBytes);
       } else {}
-      contact.name = _txName.text;
+      contact.name = txName.text;
       contact.phoneNumber = maskFormatter.getMaskedText();
       contact.photo = base64Image == '' ? photo : base64Image;
 
@@ -133,5 +112,4 @@ abstract class _ContactControllerBase with Store {
       print(e.toString());
     }
   }
-
 }

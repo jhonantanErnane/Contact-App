@@ -18,10 +18,6 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends ModularState<ContactPage, ContactController> {
   //use 'controller' variable to access controller
-  final TextEditingController _txNickName = TextEditingController();
-  final TextEditingController _txWork = TextEditingController();
-  final TextEditingController _txEmail = TextEditingController();
-  final TextEditingController _txWebsite = TextEditingController();
 
   @override
   void initState() {
@@ -35,7 +31,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // name field
     components.add(TextFormField(
-      controller: controller.controllertxName,
+      controller: controller.txName,
       keyboardType: TextInputType.text,
       inputFormatters: [
         LengthLimitingTextInputFormatter(45),
@@ -49,7 +45,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // nickName field
     components.add(TextField(
-      controller: _txNickName,
+      controller: controller.txNickName,
       keyboardType: TextInputType.text,
       inputFormatters: [
         LengthLimitingTextInputFormatter(25),
@@ -62,7 +58,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // work field
     components.add(TextField(
-      controller: _txWork,
+      controller: controller.txWork,
       inputFormatters: [
         LengthLimitingTextInputFormatter(45),
       ],
@@ -75,7 +71,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // phone field
     components.add(TextFormField(
-      controller: controller.controllertxPhone,
+      controller: controller.txPhone,
       inputFormatters: [
         controller.maskFormatter,
       ],
@@ -89,7 +85,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // email field
     components.add(TextField(
-      controller: _txEmail,
+      controller: controller.txEmail,
       inputFormatters: [
         LengthLimitingTextInputFormatter(50),
       ],
@@ -102,7 +98,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
 
     // website field
     components.add(TextField(
-      controller: _txWebsite,
+      controller: controller.txWebsite,
       inputFormatters: [
         LengthLimitingTextInputFormatter(50),
       ],
@@ -175,21 +171,17 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
           ),
           title: Text("Criar novo contato"),
           actions: <Widget>[
-            Observer(
-              builder: (_) {
-                return FlatButton(
-                    child: Text(
-                      'SALVAR',
-                    ),
-                    disabledTextColor: Colors.white60,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      if (controller.canSaveContact) {
-                        controller.saveContact();
-                      }
-                    });
-              },
-            ),
+            FlatButton(
+                child: Text(
+                  'SALVAR',
+                ),
+                disabledTextColor: Colors.white60,
+                textColor: Colors.white,
+                onPressed: () {
+                  if (controller.canSaveContact) {
+                    controller.saveContact();
+                  }
+                }),
           ],
         ),
         body: form);
