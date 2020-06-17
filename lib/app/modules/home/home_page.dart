@@ -125,8 +125,11 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Modular.to.pushNamed('contacts/add');
+        onPressed: () async {
+          final param = await Modular.to.pushNamed('contacts/add') as Map;
+          if (param != null && param['loadContacts']) {
+            controller.getContacts();
+          }
         },
       ),
     );

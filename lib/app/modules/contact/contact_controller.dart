@@ -106,7 +106,7 @@ abstract class _ContactControllerBase with Store {
         await _storage.putContact(contact);
       }
 
-      Modular.to.pop();
+      Modular.to.pop({'loadContacts':true});
     } catch (e) {
       print('ocorreu um erro ao salvar o contato');
       print(e.toString());
