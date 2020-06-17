@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../shared/widgets/custom_loading/custom_loading_widget.dart';
 import '../../shared/widgets/contact_list/contact_list_widget.dart';
 import 'home_controller.dart';
 
@@ -14,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
-  //use 'controller' variable to access controller
   Color color = Colors.indigo;
   Widget appBarTitle = new Text("Contatos");
   Icon actionIcon = new Icon(Icons.search);
@@ -92,37 +92,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           // ),
           ),
       body: Observer(builder: (_) {
-        return ContactListWidget(
-          contacts: controller.contacts,
+        return CustomLoadingWidget(
+          isLoading: controller.isLoading,
+          child: ContactListWidget(
+            contacts: controller.contacts,
+          ),
         );
       }),
-      // StreamBuilder(
-      //   builder: (context, snapshot) {
-      //     if (!snapshot.hasData) {
-      //       return Center(child: CircularProgressIndicator());
-      //     }
-
-      //     if (snapshot.hasError) {
-      //       print(snapshot.error);
-      //       return Text('Error: ${snapshot.error}');
-      //     } else {
-
-      //       if (searching && snapshot.data.length == 0) {
-      //         return Column(
-      //           children: <Widget>[
-      //             Center(
-      //                 child: Padding(
-      //               padding: const EdgeInsets.all(10),
-      //               child: Text("Nenhum contato localizado"),
-      //             )),
-      //           ],
-      //         );
-      //       } else {
-      //         return Container(); // ContactListWidget(items: snapshot.data);
-      //       }
-      //     }
-      //   },
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {

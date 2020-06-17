@@ -13,11 +13,17 @@ abstract class _HomeControllerBase with Store {
   @observable
   List<ContactModel> contacts;
 
+  @observable
+  bool isLoading;
+
   _HomeControllerBase() {
     getContacts();
   }
 
+  @action
   Future<void> getContacts() async {
+    isLoading = true;
     contacts = await _storage.getAllContacts();
+    isLoading = false;
   }
 }

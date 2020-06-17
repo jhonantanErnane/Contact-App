@@ -24,10 +24,34 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: '_HomeControllerBase.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  final _$getContactsAsyncAction =
+      AsyncAction('_HomeControllerBase.getContacts');
+
+  @override
+  Future<void> getContacts() {
+    return _$getContactsAsyncAction.run(() => super.getContacts());
+  }
+
   @override
   String toString() {
     return '''
-contacts: ${contacts}
+contacts: ${contacts},
+isLoading: ${isLoading}
     ''';
   }
 }
