@@ -1,7 +1,9 @@
+import 'package:contact_app/app/shared/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../shared/delegates/search_contact_delegate.dart';
 import '../../shared/widgets/custom_loading/custom_loading_widget.dart';
 import '../../shared/widgets/contact_list/contact_list_widget.dart';
 import 'home_controller.dart';
@@ -26,71 +28,21 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size(double.infinity, kToolbarHeight),
-          // child: StreamBuilder(
-          //   builder: (conext, snapshot) {
-          //     if (snapshot.hasError) {
-          //       print(snapshot.error);
-          //       return Text('Error: ${snapshot.error}');
-          //     } else {
-          //       if (!snapshot.hasData) {
-          //         return Center(child: CircularProgressIndicator());
-          //       }
-
-          //       if (snapshot.data) {
-          //   return AppBar(
-          //     title: appBarTitle,
-          //     backgroundColor: color,
-          //     actions: <Widget>[
-          //       IconButton(
-          //         icon: actionIcon,
-          //         onPressed: () {
-          //           setState(() {
-          //             if (this.actionIcon.icon == Icons.search) {
-          //               this.actionIcon = new Icon(
-          //                 Icons.close,
-          //                 color: Colors.indigo,
-          //               );
-          //               this.color = Colors.white;
-          //               this.appBarTitle = new TextField(
-          //                 controller: _cSearch,
-          //                 style: new TextStyle(
-          //                   color: Colors.indigo,
-          //                 ),
-          //                 autofocus: true,
-          //                 onChanged: (value) {
-          //                   this.searching = true;
-          //                 },
-          //                 decoration: new InputDecoration(
-          //                     prefixIcon: new Icon(Icons.search,
-          //                         color: Colors.indigo),
-          //                     hintText: "Pesquisar contatos",
-          //                     hintStyle:
-          //                         new TextStyle(color: Colors.indigo)),
-          //               );
-          //             } else {
-          //               _cSearch.clear();
-          //               this.searching = false;
-          //               this.actionIcon = new Icon(
-          //                 Icons.search,
-          //               );
-          //               this.color = Colors.indigo;
-          //               this.appBarTitle = new Text("Contatos");
-          //               // bloc.getListContact();
-          //             }
-          //           });
-          //         },
-          //       ),
-          //     ],
-          //   );
-          // } else {
           child: AppBar(
             title: Text("Contatos"),
-          )
-          //       }
-          //     }
-          //   },
-          // ),
-          ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () async {
+                  ContactModel result = await showSearch(
+                      context: context, delegate: SearchContact());
+                  if (result != null) {
+                    print(result);
+                  }
+                },
+              ),
+            ],
+          )),
       body: Observer(builder: (_) {
         return CustomLoadingWidget(
           isLoading: controller.isLoading,

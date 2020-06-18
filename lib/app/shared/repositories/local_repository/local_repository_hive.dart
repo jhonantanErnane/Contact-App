@@ -46,6 +46,16 @@ class LocalStorageHive implements ILocalRepository {
   }
 
   @override
+  Future<List<String>> searchAllContacts(String name) async {
+    List<ContactModel> listContacts = await getAllContacts();
+    List<String> suggestions = listContacts
+        .where((contact) {
+          return contact.name.toLowerCase().contains(name.toLowerCase());
+        }).map((e) => e.name).toList();
+    return suggestions;
+  }
+
+  @override
   Future<ContactModel> getContact(int id) async {
     var boxContact = await _instance.future;
     return boxContact.getAt(id);
