@@ -33,8 +33,11 @@ class LocalStorageHive implements ILocalRepository {
     boxContact.deleteFromDisk();
   }
 
+  /// Get all contacts 
+  /// 
+  /// Optinal parameter [name], will filter in all contacts by name
   @override
-  Future<List<ContactModel>> getAllContacts() async {
+  Future<List<ContactModel>> getAllContacts([String name]) async {
     var boxContact = await _instance.future;
     Map<dynamic, dynamic> raw = boxContact.toMap();
     List<ContactModel> contacts = List<ContactModel>();
@@ -42,16 +45,19 @@ class LocalStorageHive implements ILocalRepository {
       value.id = key;
       contacts.add(value);
     });
+    if (name != null) {
+      contacts = contacts.where((contact) {
+        return contact.name.toLowerCase().contains(name.toLowerCase());
+      }).toList();
+    }
     return contacts;
   }
 
   @override
   Future<List<String>> searchAllContacts(String name) async {
-    List<ContactModel> listContacts = await getAllContacts();
-    List<String> suggestions = listContacts
-        .where((contact) {
-          return contact.name.toLowerCase().contains(name.toLowerCase());
-        }).map((e) => e.name).toList();
+    List<ContactModel> listContacts = await getAllContacts(name);
+
+    List<String> suggestions = listContacts.map((e) => e.name).toList();
     return suggestions;
   }
 

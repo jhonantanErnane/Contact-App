@@ -34,11 +34,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () async {
-                  ContactModel result = await showSearch(
+                  await showSearch(
                       context: context, delegate: SearchContact());
-                  if (result != null) {
-                    print(result);
-                  }
                 },
               ),
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../shared/widgets/contact_list/contact_list_widget.dart';
 import '../../shared/models/contact_model.dart';
 import '../../shared/repositories/repository_interface.dart';
 
@@ -39,7 +40,24 @@ class SearchContact extends SearchDelegate<ContactModel> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    if (query.isEmpty) {
+      return Container();
+    } else {
+      return FutureBuilder<List<ContactModel>>(
+        future: _storage.getAllContacts(query),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ContactListWidget(
+            contacts: snapshot.data,
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -62,7 +80,8 @@ class SearchContact extends SearchDelegate<ContactModel> {
               return ListTile(
                 title: Text(contactList.elementAt(index)),
                 onTap: () {
-                  // close(context, contactList.elementAt(index));
+                  query = contactList.elementAt(index);
+                  showResults(context);
                 },
               );
             },
