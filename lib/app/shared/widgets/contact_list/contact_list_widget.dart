@@ -43,6 +43,7 @@ class ContactListWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 16),
                     ),
                     onPressed: () {
+                      Modular.to.pop();
                       Modular.to.pushNamed('/contacts/edit/${contact.id}');
                     },
                   ),
@@ -54,7 +55,7 @@ class ContactListWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 16),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Modular.to.pop();
                       _showDialog(contact, context);
                     },
                   ),
