@@ -8,8 +8,9 @@ import '../../shared/repositories/repository_interface.dart';
 class SearchContact extends SearchDelegate<ContactModel> {
   final _storage = Modular.get<ILocalRepository>();
   final Function(Map<dynamic, dynamic>) onNavigation;
+  final Function(int id) onDelete;
 
-  SearchContact({@required this.onNavigation});
+  SearchContact({@required this.onNavigation, @required this.onDelete});
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -58,6 +59,7 @@ class SearchContact extends SearchDelegate<ContactModel> {
           return ContactListWidget(
             contacts: snapshot.data,
             onNavigation: onNavigation,
+            onDelete: onDelete,
           );
         },
       );

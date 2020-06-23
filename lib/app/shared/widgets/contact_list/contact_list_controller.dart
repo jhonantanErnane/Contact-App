@@ -6,11 +6,5 @@ class ContactListController = _ContactListControllerBase
     with _$ContactListController;
 
 abstract class _ContactListControllerBase with Store {
-  @observable
-  int value = 0;
 
-  @action
-  void increment() {
-    value++;
-  }
 }

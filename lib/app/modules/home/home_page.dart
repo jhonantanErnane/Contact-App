@@ -35,8 +35,10 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 onPressed: () async {
                   await showSearch(
                       context: context,
-                      delegate:
-                          SearchContact(onNavigation: controller.onNavigation));
+                      delegate: SearchContact(
+                        onNavigation: controller.onNavigation,
+                        onDelete: controller.delContact,
+                      ));
                 },
               ),
             ],
@@ -47,6 +49,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           child: ContactListWidget(
             contacts: controller.contacts,
             onNavigation: controller.onNavigation,
+            onDelete: controller.delContact,
           ),
         );
       }),

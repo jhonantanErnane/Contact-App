@@ -6,10 +6,14 @@ import 'package:flutter_modular/flutter_modular.dart';
 class ContactListWidget extends StatelessWidget {
   Offset _tapPosition;
   final Function(Map<dynamic, dynamic>) onNavigation;
+  final Function(int id) onDelete;
 
   final List<ContactModel> contacts;
 
-  ContactListWidget({@required this.contacts, @required this.onNavigation});
+  ContactListWidget(
+      {@required this.contacts,
+      @required this.onNavigation,
+      @required this.onDelete});
 
   void _onTapDown(TapDownDetails details) {
     _tapPosition = details.globalPosition;
@@ -156,25 +160,25 @@ class ContactListWidget extends StatelessWidget {
     );
   }
 
-  void _showDialog(item, BuildContext context) {
+  void _showDialog(ContactModel contact, BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Deseja excluir o contato?"),
-          content: new Text(item['name']),
+          title: Text("Deseja excluir o contato?"),
+          content: Text(contact.name),
           actions: <Widget>[
-            new FlatButton(
-              child: new Text("Cancelar"),
+            FlatButton(
+              child: Text("Cancelar"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Modular.to.pop();
               },
             ),
-            new FlatButton(
-              child: new Text("Sim"),
+            FlatButton(
+              child: Text("Sim"),
               onPressed: () {
-                Navigator.of(context).pop();
-                // bloc.deleteContact(item['id']);
+                Modular.to.pop();
+                onDelete(contact.id);
               },
             ),
           ],
