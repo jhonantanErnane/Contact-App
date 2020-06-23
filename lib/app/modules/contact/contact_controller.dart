@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:contact_app/app/shared/widgets/globalScaffold/global_scaffold.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
@@ -106,10 +108,20 @@ abstract class _ContactControllerBase with Store {
         await _storage.putContact(contact);
       }
 
-      Modular.to.pop({'loadContacts':true});
+      _showFeedback('Contato salvo com sucesso!');
+      
+      Modular.to.pop({'loadContacts': true});
     } catch (e) {
-      print('ocorreu um erro ao salvar o contato');
+      _showFeedback('ocorreu um erro ao salvar o contato');
       print(e.toString());
     }
+  }
+
+  void _showFeedback(String msg) {
+    final content = SnackBar(
+      content: Text(msg),
+    );
+
+    GlobalScaffold.instance.showSnackBar(content);
   }
 }
