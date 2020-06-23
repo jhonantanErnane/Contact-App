@@ -10,8 +10,7 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   final _storage = Modular.get<ILocalRepository>();
 
-  @observable
-  List<ContactModel> contacts;
+  ObservableList<ContactModel> contacts;
 
   @observable
   bool isLoading;
@@ -23,7 +22,13 @@ abstract class _HomeControllerBase with Store {
   @action
   Future<void> getContacts() async {
     isLoading = true;
-    contacts = await _storage.getAllContacts();
+    contacts = ObservableList.of(await _storage.getAllContacts());
     isLoading = false;
+  }
+
+  onNavigation(Map<dynamic, dynamic> param) {
+    if (param != null && param['loadContacts']) {
+      getContacts();
+    }
   }
 }

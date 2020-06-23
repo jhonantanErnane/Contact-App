@@ -34,7 +34,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 icon: Icon(Icons.search),
                 onPressed: () async {
                   await showSearch(
-                      context: context, delegate: SearchContact());
+                      context: context,
+                      delegate:
+                          SearchContact(onNavigation: controller.onNavigation));
                 },
               ),
             ],
@@ -44,6 +46,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           isLoading: controller.isLoading,
           child: ContactListWidget(
             contacts: controller.contacts,
+            onNavigation: controller.onNavigation,
           ),
         );
       }),
@@ -51,9 +54,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         child: Icon(Icons.add),
         onPressed: () async {
           final param = await Modular.to.pushNamed('contacts/add') as Map;
-          if (param != null && param['loadContacts']) {
-            controller.getContacts();
-          }
+          controller.onNavigation(param);
         },
       ),
     );

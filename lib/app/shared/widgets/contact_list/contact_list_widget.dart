@@ -5,9 +5,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class ContactListWidget extends StatelessWidget {
   Offset _tapPosition;
+  final Function(Map<dynamic, dynamic>) onNavigation;
+
   final List<ContactModel> contacts;
 
-  ContactListWidget({@required this.contacts});
+  ContactListWidget({@required this.contacts, @required this.onNavigation});
 
   void _onTapDown(TapDownDetails details) {
     _tapPosition = details.globalPosition;
@@ -42,9 +44,10 @@ class ContactListWidget extends StatelessWidget {
                       "Editar",
                       style: TextStyle(fontSize: 16),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       Modular.to.pop();
-                      Modular.to.pushNamed('/contacts/edit/${contact.id}');
+                      final param = await Modular.to.pushNamed('/contacts/edit/${contact.id}');
+                      onNavigation(param);
                     },
                   ),
                 ),
