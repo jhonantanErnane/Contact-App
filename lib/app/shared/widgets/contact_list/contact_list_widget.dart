@@ -45,8 +45,9 @@ class ContactListWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 16),
                     ),
                     onPressed: () async {
-                      Modular.to.pop();
-                      final param = await Modular.to.pushNamed('/contacts/edit/${contact.id}');
+                      Modular.to.popUntil((route) => route.isFirst);
+                      final param = await Modular.to
+                          .pushNamed('/contacts/edit/${contact.id}');
                       onNavigation(param);
                     },
                   ),
