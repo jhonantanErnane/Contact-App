@@ -64,7 +64,7 @@ class LocalStorageHive implements ILocalRepository {
   @override
   Future<ContactModel> getContact(int id) async {
     var boxContact = await _instance.future;
-    return boxContact.getAt(id);
+    return boxContact.get(id);
   }
 
   @override
