@@ -102,11 +102,7 @@ class ContactListWidget extends StatelessWidget {
                   ? Text(contact.phoneNumber)
                   : null,
               onTap: () {
-                // bloc.setContact(contact);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ViewPage()),
-                // );
+                Modular.to.pushNamed('/view/${contact.id}');
               },
             ),
           ),

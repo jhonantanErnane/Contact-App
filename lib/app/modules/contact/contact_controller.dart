@@ -109,7 +109,7 @@ abstract class _ContactControllerBase with Store {
       }
 
       _showFeedback('Contato salvo com sucesso!');
-      
+
       Modular.to.pop({'loadContacts': true});
     } catch (e) {
       _showFeedback('ocorreu um erro ao salvar o contato');

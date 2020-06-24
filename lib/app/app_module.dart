@@ -8,6 +8,7 @@ import './shared/repositories/local_repository/local_repository_hive.dart';
 import './app_widget.dart';
 import './modules/home/home_module.dart';
 import './shared/repositories/repository_interface.dart';
+import 'modules/view_contact/view_contact_module.dart';
 
 class AppModule extends MainModule {
   @override
@@ -20,6 +21,7 @@ class AppModule extends MainModule {
   List<Router> get routers => [
         Router(Modular.initialRoute, module: HomeModule()),
         Router('/contacts', module: ContactModule()),
+        Router('/view/', module: ViewContactModule()),
         Router('/about', module: AboutModule()),
       ];
 
