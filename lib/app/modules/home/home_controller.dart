@@ -34,6 +34,14 @@ abstract class _HomeControllerBase with Store {
     isLoading = false;
   }
 
+  @action
+  Future<void> delContacts() async {
+    isLoading = true;
+    await _storage.delContacts();
+    getContacts();
+    isLoading = false;
+  }
+
   onNavigation(Map<dynamic, dynamic> param) {
     if (param != null && param['loadContacts']) {
       getContacts();

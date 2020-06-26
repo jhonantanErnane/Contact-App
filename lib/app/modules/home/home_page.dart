@@ -58,6 +58,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         onPressed: () async {
           final param = await Modular.to.pushNamed('contacts/add') as Map;
           controller.onNavigation(param);
+          // await controller.delContacts();
         },
       ),
     );

@@ -5,12 +5,12 @@ import 'package:image_picker/image_picker.dart';
 
 class ImageSourceSheetWidget extends StatelessWidget {
   final Function(File) onImageSelected;
-
   const ImageSourceSheetWidget({Key key, this.onImageSelected})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ImagePicker imagePicker = ImagePicker();
     return BottomSheet(
       builder: (BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -18,16 +18,14 @@ class ImageSourceSheetWidget extends StatelessWidget {
           FlatButton(
             child: Text('Câmera'),
             onPressed: () async {
-              File file =
-                  await ImagePicker.pickImage(source: ImageSource.camera);
+              PickedFile file = await imagePicker.getImage(source: ImageSource.camera);
               _imageSelected(file);
             },
           ),
           FlatButton(
             child: Text('Galeria'),
             onPressed: () async {
-              File file =
-                  await ImagePicker.pickImage(source: ImageSource.gallery);
+              PickedFile file = await imagePicker.getImage(source: ImageSource.gallery);
               _imageSelected(file);
             },
           )
@@ -37,7 +35,7 @@ class ImageSourceSheetWidget extends StatelessWidget {
     );
   }
 
-  Future _imageSelected(File image) async {
+  Future _imageSelected(PickedFile image) async {
     if (image != null) {
       try {
         File croppedImage = await ImageCropper.cropImage(
@@ -52,6 +50,7 @@ class ImageSourceSheetWidget extends StatelessWidget {
         onImageSelected(croppedImage);
       } catch (e) {
         print(e.toString());
+        onImageSelected(null);
       }
     } else
       onImageSelected(null);

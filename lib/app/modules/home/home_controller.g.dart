@@ -39,6 +39,14 @@ mixin _$HomeController on _HomeControllerBase, Store {
     return _$delContactAsyncAction.run(() => super.delContact(id));
   }
 
+  final _$delContactsAsyncAction =
+      AsyncAction('_HomeControllerBase.delContacts');
+
+  @override
+  Future<void> delContacts() {
+    return _$delContactsAsyncAction.run(() => super.delContacts());
+  }
+
   @override
   String toString() {
     return '''

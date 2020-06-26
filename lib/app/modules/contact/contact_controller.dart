@@ -100,6 +100,11 @@ abstract class _ContactControllerBase with Store {
       contact.name = txName.text;
       contact.phoneNumber = maskFormatter.getMaskedText();
       contact.photo = base64Image == '' ? photo : base64Image;
+      contact.isFavorite = false;
+      contact.nickName = txNickName.text;
+      contact.webSite = txWebsite.text;
+      contact.work = txWork.text;
+      contact.email = txEmail.text;
 
       photo = base64Decode(base64Image);
       if (contact.id == null) {
