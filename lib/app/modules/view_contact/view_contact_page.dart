@@ -1,4 +1,5 @@
-import 'package:contact_app/app/shared/models/contact_model.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -7,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'view_contact_controller.dart';
+import '../../shared/models/contact_model.dart';
 
 class ViewContactPage extends StatefulWidget {
   final String title;
@@ -27,54 +29,48 @@ class _ViewContactPageState
     ListView content(context, ContactModel contact) {
       return ListView(
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              buildHeader(context, contact.name ?? ''),
-              buildInformation(
-                  contact.phoneNumber ?? '', contact.email ?? '', contact.name),
-            ],
-          )
+          buildHeader(context, contact.name ?? ''),
+          buildInformation(
+              contact.phoneNumber ?? '', contact.email ?? '', contact.name),
         ],
       );
     }
 
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, kToolbarHeight),
-          child: AppBar(
-            elevation: 0,
-            actions: <Widget>[
-              Observer(builder: (_) {
-                if (controller.contact == null) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return IconButton(
-                  color: Colors.white,
-                  icon: controller.contact.isFavorite == 1
-                      ? Icon(Icons.star)
-                      : Icon(Icons.star_border),
-                  onPressed: () {
-                    // updateFavorite(contact);
-                  },
-                );
-              }),
-              IconButton(
-                color: Colors.white,
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  Modular.to
-                      .pushNamed('/contacts/edit/${controller.contact.id}');
-                },
-              ),
-              // IconButton(
-              //   color: Colors.white,
-              //   icon: Icon(Icons.more_vert),
-              //   onPressed: () {},
-              // ),
-            ],
-          )),
+      appBar: AppBar(
+        elevation: 0,
+        actions: <Widget>[
+          Observer(builder: (_) {
+            if (controller.contact == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return IconButton(
+              color: Colors.white,
+              icon: controller.isFavorite
+                  ? Icon(Icons.star)
+                  : Icon(Icons.star_border),
+              onPressed: controller.toggleFavorite,
+            );
+          }),
+          IconButton(
+            color: Colors.white,
+            icon: Icon(Icons.edit),
+            onPressed: () async {
+              final param = await Modular.to
+                  .pushNamed('/contacts/edit/${controller.contact.id}');
+
+              controller.onNavigation(param);
+            },
+          ),
+          // IconButton(
+          //   color: Colors.white,
+          //   icon: Icon(Icons.more_vert),
+          //   onPressed: () {},
+          // ),
+        ],
+      ),
       body: Observer(builder: (_) {
         if (controller.contact == null) {
           return Center(
@@ -121,14 +117,21 @@ class _ViewContactPageState
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.40,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          SizedBox(height: 20),
-          SizedBox(height: 20),
-          Icon(
-            Icons.person,
-            color: Colors.white,
-            size: 160,
-          ),
+          Container(
+              width: 160.0,
+              height: 160.0,
+              child: controller.contact.photo != null
+                  ? CircleAvatar(
+                      backgroundImage:
+                          MemoryImage(base64Decode(controller.contact.photo)),
+                    )
+                  : Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 160,
+                    )),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

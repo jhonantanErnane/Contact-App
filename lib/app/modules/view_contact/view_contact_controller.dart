@@ -16,6 +16,9 @@ abstract class _ViewContactControllerBase with Store {
   bool existWhatsapp = false;
 
   @observable
+  bool isFavorite = false;
+
+  @observable
   ContactModel contact;
 
   _ViewContactControllerBase() {
@@ -24,22 +27,35 @@ abstract class _ViewContactControllerBase with Store {
 
   Future<void> _setupValidations() async {
     if (Modular.args.params != null) {
-      await _getContact();
+      await getContact();
     }
   }
 
-  Future<void> _getContact() async {
+  @action
+  Future<void> getContact() async {
     this.contact =
         await _storage.getContact(int.parse(Modular.args.params['id']));
+    isFavorite = contact.isFavorite;
   }
 
-  setFavorite(ContactModel c) {}
+  @action
+  Future<void> toggleFavorite() async {
+    contact.isFavorite = !contact.isFavorite;
+    await _storage.putContact(contact);
+    isFavorite = contact.isFavorite;
+  }
 
   Future<void> getApps() async {
     try {
       existWhatsapp = await FlutterLaunch.hasApp(name: 'whatsapp');
     } catch (err) {
       existWhatsapp = false;
+    }
+  }
+
+  onNavigation(Map<dynamic, dynamic> param) {
+    if (param != null && param['loadContacts']) {
+      getContact();
     }
   }
 }

@@ -25,6 +25,21 @@ mixin _$ViewContactController on _ViewContactControllerBase, Store {
     });
   }
 
+  final _$isFavoriteAtom = Atom(name: '_ViewContactControllerBase.isFavorite');
+
+  @override
+  bool get isFavorite {
+    _$isFavoriteAtom.reportRead();
+    return super.isFavorite;
+  }
+
+  @override
+  set isFavorite(bool value) {
+    _$isFavoriteAtom.reportWrite(value, super.isFavorite, () {
+      super.isFavorite = value;
+    });
+  }
+
   final _$contactAtom = Atom(name: '_ViewContactControllerBase.contact');
 
   @override
@@ -40,10 +55,27 @@ mixin _$ViewContactController on _ViewContactControllerBase, Store {
     });
   }
 
+  final _$getContactAsyncAction =
+      AsyncAction('_ViewContactControllerBase.getContact');
+
+  @override
+  Future<void> getContact() {
+    return _$getContactAsyncAction.run(() => super.getContact());
+  }
+
+  final _$toggleFavoriteAsyncAction =
+      AsyncAction('_ViewContactControllerBase.toggleFavorite');
+
+  @override
+  Future<void> toggleFavorite() {
+    return _$toggleFavoriteAsyncAction.run(() => super.toggleFavorite());
+  }
+
   @override
   String toString() {
     return '''
 existWhatsapp: ${existWhatsapp},
+isFavorite: ${isFavorite},
 contact: ${contact}
     ''';
   }
