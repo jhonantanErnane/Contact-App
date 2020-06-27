@@ -3,6 +3,7 @@ import 'package:contact_app/app/shared/repositories/repository_interface.dart';
 import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'view_contact_controller.g.dart';
 
@@ -22,10 +23,10 @@ abstract class _ViewContactControllerBase with Store {
   ContactModel contact;
 
   _ViewContactControllerBase() {
-    _setupValidations();
+    _init();
   }
 
-  Future<void> _setupValidations() async {
+  Future<void> _init() async {
     if (Modular.args.params != null) {
       await getContact();
     }
@@ -50,6 +51,35 @@ abstract class _ViewContactControllerBase with Store {
       existWhatsapp = await FlutterLaunch.hasApp(name: 'whatsapp');
     } catch (err) {
       existWhatsapp = false;
+    }
+  }
+
+    void whatsAppOpen(phoneNumber, message) async {
+    await FlutterLaunch.launchWathsApp(phone: '55'+phoneNumber, message: message);
+  }
+
+  textMe(String number) async {
+    // Android
+    String uri = "sms:$number";
+    if (await canLaunch(uri)) {
+      await launch(uri);
+    } else {
+      // iOS
+      String uri = "sms:$number";
+      if (await canLaunch(uri)) {
+        await launch(uri);
+      } else {
+        throw 'Could not launch $uri';
+      }
+    }
+  }
+
+  launchCaller(String number) async {
+    String url = "tel:$number";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 

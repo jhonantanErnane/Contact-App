@@ -1,18 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'view_contact_controller.dart';
 import '../../shared/models/contact_model.dart';
 
 class ViewContactPage extends StatefulWidget {
-  final String title;
-  const ViewContactPage({Key key, this.title = "ViewContact"})
+  const ViewContactPage({Key key})
       : super(key: key);
 
   @override
@@ -82,35 +79,6 @@ class _ViewContactPageState
     );
   }
 
-  void whatsAppOpen(phoneNumber, message) async {
-    await FlutterLaunch.launchWathsApp(phone: phoneNumber, message: message);
-  }
-
-  _textMe(String number) async {
-    // Android
-    String uri = "sms:$number";
-    if (await canLaunch(uri)) {
-      await launch(uri);
-    } else {
-      // iOS
-      String uri = "sms:$number";
-      if (await canLaunch(uri)) {
-        await launch(uri);
-      } else {
-        throw 'Could not launch $uri';
-      }
-    }
-  }
-
-  _launchCaller(String number) async {
-    String url = "tel:$number";
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   Container buildHeader(BuildContext context, String name) {
     return Container(
       decoration: BoxDecoration(color: Colors.indigo),
@@ -166,13 +134,13 @@ class _ViewContactPageState
               leading: IconButton(
                 icon: Icon(Icons.phone, color: Colors.indigo),
                 onPressed: () {
-                  _launchCaller(phoneNumber);
+                  controller.launchCaller(phoneNumber);
                 },
               ),
               trailing: IconButton(
                 icon: Icon(Icons.message),
                 onPressed: () {
-                  _textMe(phoneNumber);
+                  controller.textMe(phoneNumber);
                 },
               ),
             ),
@@ -219,7 +187,7 @@ class _ViewContactPageState
                         icon: Icon(FontAwesomeIcons.whatsapp,
                             color: Colors.indigo),
                         onPressed: () {
-                          whatsAppOpen(phoneNumber.toString(), "");
+                          controller.whatsAppOpen(phoneNumber.toString(), "");
                         }),
                   )
                 : Container(),
