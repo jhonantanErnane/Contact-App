@@ -1,16 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
+
+import '../../shared/models/contact.dart';
 import 'view_contact_controller.dart';
-import '../../shared/models/contact_model.dart';
 
 class ViewContactPage extends StatefulWidget {
-  const ViewContactPage({Key key})
-      : super(key: key);
+  const ViewContactPage({Key key}) : super(key: key);
 
   @override
   _ViewContactPageState createState() => _ViewContactPageState();
@@ -23,7 +22,7 @@ class _ViewContactPageState
   @override
   Widget build(BuildContext context) {
     controller.getApps();
-    ListView content(context, ContactModel contact) {
+    ListView content(context, Contact contact) {
       return ListView(
         children: <Widget>[
           buildHeader(context, contact.name ?? ''),
@@ -55,10 +54,10 @@ class _ViewContactPageState
             color: Colors.white,
             icon: Icon(Icons.edit),
             onPressed: () async {
-              final param = await Modular.to
+              await Modular.to
                   .pushNamed('/contacts/edit/${controller.contact.id}');
 
-              controller.onNavigation(param);
+              controller.getContact();
             },
           ),
           // IconButton(

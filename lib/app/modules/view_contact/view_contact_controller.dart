@@ -1,10 +1,10 @@
-import 'package:contact_app/app/shared/models/contact_model.dart';
-import 'package:contact_app/app/shared/repositories/repository_interface.dart';
 import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../shared/models/contact.dart';
+import '../../shared/repositories/repository_interface.dart';
 part 'view_contact_controller.g.dart';
 
 class ViewContactController = _ViewContactControllerBase
@@ -20,7 +20,7 @@ abstract class _ViewContactControllerBase with Store {
   bool isFavorite = false;
 
   @observable
-  ContactModel contact;
+  Contact contact = Contact();
 
   _ViewContactControllerBase() {
     _init();
@@ -34,8 +34,7 @@ abstract class _ViewContactControllerBase with Store {
 
   @action
   Future<void> getContact() async {
-    this.contact =
-        await _storage.getContact(int.parse(Modular.args.params['id']));
+    contact = await _storage.getContact(int.parse(Modular.args.params['id']));
     isFavorite = contact.isFavorite;
   }
 
@@ -54,8 +53,9 @@ abstract class _ViewContactControllerBase with Store {
     }
   }
 
-    void whatsAppOpen(phoneNumber, message) async {
-    await FlutterLaunch.launchWathsApp(phone: '55'+phoneNumber, message: message);
+  void whatsAppOpen(phoneNumber, message) async {
+    await FlutterLaunch.launchWathsApp(
+        phone: '55' + phoneNumber, message: message);
   }
 
   textMe(String number) async {
@@ -80,12 +80,6 @@ abstract class _ViewContactControllerBase with Store {
       await launch(url);
     } else {
       throw 'Could not launch $url';
-    }
-  }
-
-  onNavigation(Map<dynamic, dynamic> param) {
-    if (param != null && param['loadContacts']) {
-      getContact();
     }
   }
 }

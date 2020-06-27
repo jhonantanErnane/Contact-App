@@ -51,7 +51,7 @@ mixin _$ContactController on _ContactControllerBase, Store {
       ActionController(name: '_ContactControllerBase');
 
   @override
-  void setContact(ContactModel c) {
+  void setContact(Contact c) {
     final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
         name: '_ContactControllerBase.setContact');
     try {

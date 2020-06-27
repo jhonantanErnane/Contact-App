@@ -43,13 +43,13 @@ mixin _$ViewContactController on _ViewContactControllerBase, Store {
   final _$contactAtom = Atom(name: '_ViewContactControllerBase.contact');
 
   @override
-  ContactModel get contact {
+  Contact get contact {
     _$contactAtom.reportRead();
     return super.contact;
   }
 
   @override
-  set contact(ContactModel value) {
+  set contact(Contact value) {
     _$contactAtom.reportWrite(value, super.contact, () {
       super.contact = value;
     });

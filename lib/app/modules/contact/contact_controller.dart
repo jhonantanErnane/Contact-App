@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:contact_app/app/shared/widgets/globalScaffold/global_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -8,8 +7,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../shared/repositories/repository_interface.dart';
-import '../../shared/models/contact_model.dart';
-
+import '../../shared/models/contact.dart';
+import '../../shared/widgets/globalScaffold/global_scaffold.dart';
 part 'contact_controller.g.dart';
 
 class ContactController = _ContactControllerBase with _$ContactController;
@@ -28,7 +27,7 @@ abstract class _ContactControllerBase with Store {
   final TextEditingController txWork = TextEditingController();
   final TextEditingController txWebsite = TextEditingController();
 
-  ContactModel contact = ContactModel();
+  Contact contact = Contact();
 
   @observable
   dynamic photo;
@@ -52,7 +51,7 @@ abstract class _ContactControllerBase with Store {
   }
 
   @action
-  void setContact(ContactModel c) {
+  void setContact(Contact c) {
     txName.text = c.name;
     txPhone.text = c.phoneNumber;
     maskFormatter.formatEditUpdate(
@@ -106,7 +105,10 @@ abstract class _ContactControllerBase with Store {
       contact.work = txWork.text;
       contact.email = txEmail.text;
 
-      photo = base64Decode(base64Image);
+      if (base64Image.isNotEmpty) {
+        photo = base64Decode(base64Image);
+      }
+
       if (contact.id == null) {
         await _storage.addContact(contact);
       } else {
