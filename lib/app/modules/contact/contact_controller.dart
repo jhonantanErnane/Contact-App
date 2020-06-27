@@ -96,11 +96,11 @@ abstract class _ContactControllerBase with Store {
       if (photo is File) {
         List<int> imageBytes = photo.readAsBytesSync();
         base64Image = base64Encode(imageBytes);
-      } else {}
+      }
       contact.name = txName.text;
       contact.phoneNumber = maskFormatter.getMaskedText();
       contact.photo = base64Image == '' ? photo : base64Image;
-      contact.isFavorite = false;
+      contact.isFavorite = contact.id == null ? false : contact.isFavorite;
       contact.nickName = txNickName.text;
       contact.webSite = txWebsite.text;
       contact.work = txWork.text;
