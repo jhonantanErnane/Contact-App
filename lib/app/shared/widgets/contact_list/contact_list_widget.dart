@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:contact_app/app/shared/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../models/contact.dart';
 
 class ContactListWidget extends StatelessWidget {
   Offset _tapPosition;
   final Function(Map<dynamic, dynamic>) onNavigation;
   final Function(int id) onDelete;
 
-  final List<ContactModel> contacts;
+  final List<Contact> contacts;
 
   ContactListWidget(
       {@required this.contacts,
@@ -35,7 +35,7 @@ class ContactListWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: contacts.length,
       itemBuilder: (BuildContext context, int index) {
-        ContactModel contact = contacts[index];
+        Contact contact = contacts[index];
         return GestureDetector(
           onTapDown: _onTapDown,
           onLongPress: () {
@@ -91,7 +91,7 @@ class ContactListWidget extends StatelessWidget {
                           style: TextStyle(fontSize: 26, color: Colors.white60),
                         )
                       : null),
-              trailing: contact.isFavorite == 1
+              trailing: contact.isFavorite
                   ? Icon(Icons.star, color: Colors.indigo)
                   : Icon(Icons.star_border),
               title: Text(
@@ -101,8 +101,10 @@ class ContactListWidget extends StatelessWidget {
               subtitle: contact.phoneNumber.toString().isNotEmpty
                   ? Text(contact.phoneNumber)
                   : null,
-              onTap: () {
-                Modular.to.pushNamed('/view/${contact.id}');
+              onTap: () async {
+                await Modular.to.pushNamed('/view/${contact.id}');
+                final param = {'loadContact': contact.id};
+                onNavigation(param);
               },
             ),
           ),
@@ -156,7 +158,7 @@ class ContactListWidget extends StatelessWidget {
     );
   }
 
-  void _showDialog(ContactModel contact, BuildContext context) {
+  void _showDialog(Contact contact, BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

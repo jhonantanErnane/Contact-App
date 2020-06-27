@@ -1,8 +1,8 @@
-import 'package:contact_app/app/shared/models/contact_model.dart';
+import 'package:contact_app/app/shared/models/contact.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import '../../shared/repositories/repository_interface.dart';
-
+import 'dart:async';
 part 'home_controller.g.dart';
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -10,7 +10,8 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   final _storage = Modular.get<ILocalRepository>();
 
-  ObservableList<ContactModel> contacts;
+  @observable
+  ObservableList<Contact> contacts = ObservableList<Contact>();
 
   @observable
   bool isLoading;
@@ -22,7 +23,7 @@ abstract class _HomeControllerBase with Store {
   @action
   Future<void> getContacts() async {
     isLoading = true;
-    contacts = ObservableList.of(await _storage.getAllContacts());
+    contacts = (await _storage.getAllContacts()).asObservable();
     isLoading = false;
   }
 
@@ -43,8 +44,26 @@ abstract class _HomeControllerBase with Store {
   }
 
   onNavigation(Map<dynamic, dynamic> param) {
-    if (param != null && param['loadContacts']) {
-      getContacts();
+    if (param != null) {
+      if (param['loadContacts'] != null) {
+        getContacts();
+      } else if (param['loadContact'] != null) {
+        getContact(param['loadContact']);
+      }
+    }
+  }
+
+  @action
+  Future<void> getContact(int id) async {
+    final contact = await _storage.getContact(id);
+    final i = contacts.indexWhere((element) => element.id == contact.id);
+    if (i != -1) {
+      contacts = contacts
+          .map((element) => element.id == contact.id
+              ? element = contact
+              : element)
+          .toList()
+          .asObservable();
     }
   }
 }

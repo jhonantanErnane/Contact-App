@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../shared/widgets/contact_list/contact_list_widget.dart';
 import '../../shared/models/contact_model.dart';
 import '../../shared/repositories/repository_interface.dart';
+import '../../shared/models/contact.dart';
 
 class SearchContact extends SearchDelegate<ContactModel> {
   final _storage = Modular.get<ILocalRepository>();
@@ -47,7 +48,7 @@ class SearchContact extends SearchDelegate<ContactModel> {
     if (query.isEmpty) {
       return Container();
     } else {
-      return FutureBuilder<List<ContactModel>>(
+      return FutureBuilder<List<Contact>>(
         future: _storage.getAllContacts(query),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {

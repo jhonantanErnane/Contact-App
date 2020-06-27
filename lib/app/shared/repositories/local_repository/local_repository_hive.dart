@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:contact_app/app/shared/models/contact.dart';
 import 'package:contact_app/app/shared/models/contact_model.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,9 +23,9 @@ class LocalStorageHive implements ILocalRepository {
   }
 
   @override
-  Future<void> addContact(ContactModel contact) async {
+  Future<void> addContact(Contact contact) async {
     var boxContact = await _instance.future;
-    boxContact.add(contact);
+    boxContact.add(ContactModel.fromContact(contact));
   }
 
   @override
@@ -33,17 +34,17 @@ class LocalStorageHive implements ILocalRepository {
     boxContact.deleteFromDisk();
   }
 
-  /// Get all contacts 
-  /// 
+  /// Get all contacts
+  ///
   /// Optinal parameter [name], will filter in all contacts by name
   @override
-  Future<List<ContactModel>> getAllContacts([String name]) async {
+  Future<List<Contact>> getAllContacts([String name]) async {
     var boxContact = await _instance.future;
     Map<dynamic, dynamic> raw = boxContact.toMap();
-    List<ContactModel> contacts = List<ContactModel>();
+    List<Contact> contacts = List<Contact>();
     raw.forEach((key, value) {
       value.id = key;
-      contacts.add(value);
+      contacts.add(Contact.fromContactModel(value));
     });
     if (name != null) {
       contacts = contacts.where((contact) {
@@ -55,22 +56,23 @@ class LocalStorageHive implements ILocalRepository {
 
   @override
   Future<List<String>> searchAllContacts(String name) async {
-    List<ContactModel> listContacts = await getAllContacts(name);
+    List<Contact> listContacts = await getAllContacts(name);
 
     List<String> suggestions = listContacts.map((e) => e.name).toList();
     return suggestions;
   }
 
   @override
-  Future<ContactModel> getContact(int id) async {
+  Future<Contact> getContact(int id) async {
     var boxContact = await _instance.future;
-    return boxContact.get(id);
+    return Contact.fromContactModel(boxContact.get(id));
   }
 
   @override
-  Future<void> putContact(ContactModel contact) async {
+  Future<void> putContact(Contact contact) async {
     var boxContact = await _instance.future;
-    boxContact.putAt(contact.id, contact);
+    return await boxContact.putAt(
+        contact.id, ContactModel.fromContact(contact));
   }
 
   @override

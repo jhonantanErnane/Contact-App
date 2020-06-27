@@ -1,32 +1,18 @@
-import 'package:hive/hive.dart';
+import 'package:contact_app/app/shared/models/contact_model.dart';
 
-import 'contact.dart';
-
-part 'contact_model.g.dart';
-
-@HiveType(typeId: 0)
-class ContactModel {
+class Contact {
   int id;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String nickName;
-  @HiveField(3)
   String work;
-  @HiveField(4)
   bool isFavorite;
-  @HiveField(5)
   String photo;
-  @HiveField(6)
   String phoneNumber;
-  @HiveField(7)
   String email;
-  @HiveField(8)
   String webSite;
-  @HiveField(9)
   String created;
 
-  ContactModel({
+  Contact({
     this.id,
     this.name,
     this.nickName,
@@ -39,7 +25,7 @@ class ContactModel {
     this.created,
   });
 
-  ContactModel.fromContact(Contact c) {
+  Contact.fromContactModel(ContactModel c) {
     this.id = c.id;
     this.name = c.name;
     this.nickName = c.nickName;
@@ -52,7 +38,7 @@ class ContactModel {
     this.created = c.created;
   }
 
-  ContactModel.fromJson(Map<String, dynamic> json) {
+  Contact.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     nickName = json['nickName'];
