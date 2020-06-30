@@ -14,6 +14,9 @@ class SearchContact extends SearchDelegate<ContactModel> {
   SearchContact({@required this.onNavigation, @required this.onDelete});
 
   @override
+  String get searchFieldLabel => 'Procure um contato...';
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -40,7 +43,17 @@ class SearchContact extends SearchDelegate<ContactModel> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context);
+    ThemeData theme = Theme.of(context);
+    theme = theme.copyWith(
+        inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+            hintStyle:
+                theme.textTheme.headline6.copyWith(color: Colors.redAccent)));
+    theme = theme.copyWith(
+      appBarTheme: theme.appBarTheme.copyWith(
+          textTheme: new TextTheme(headline6: TextStyle(color: Colors.teal))),
+    );
+
+    return theme;
   }
 
   @override

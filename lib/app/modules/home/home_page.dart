@@ -17,10 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   Color color = Colors.indigo;
-  Widget appBarTitle = new Text("Contatos");
-  Icon actionIcon = new Icon(Icons.search);
-  bool searching = false;
-  final _cSearch = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

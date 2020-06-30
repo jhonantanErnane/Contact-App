@@ -16,7 +16,8 @@ class AppWidget extends StatelessWidget {
         );
       },
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.indigo,
+        accentColor: Colors.indigo,
       ),
       initialRoute: '/',
       onGenerateRoute: Modular.generateRoute,
