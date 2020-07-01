@@ -45,14 +45,13 @@ class SearchContact extends SearchDelegate<ContactModel> {
   ThemeData appBarTheme(BuildContext context) {
     ThemeData theme = Theme.of(context);
     theme = theme.copyWith(
+        textTheme: TextTheme(
+          headline6: theme.textTheme.headline6.copyWith(color: Colors.white),
+        ),
         inputDecorationTheme: theme.inputDecorationTheme.copyWith(
-            hintStyle:
-                theme.textTheme.headline6.copyWith(color: Colors.redAccent)));
-    theme = theme.copyWith(
-      appBarTheme: theme.appBarTheme.copyWith(
-          textTheme: new TextTheme(headline6: TextStyle(color: Colors.teal))),
-    );
-
+            hintStyle: theme.textTheme.headline6.copyWith(
+          color: Colors.white38,
+        )));
     return theme;
   }
 
