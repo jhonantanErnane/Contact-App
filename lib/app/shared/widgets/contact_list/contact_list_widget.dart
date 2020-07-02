@@ -7,18 +7,25 @@ import '../../models/contact.dart';
 class ContactListWidget extends StatelessWidget {
   final Function(Map<dynamic, dynamic>) onNavigation;
   final Function(int id) onDelete;
+  final bool isLoading;
 
   final List<Contact> contacts;
 
   ContactListWidget(
       {@required this.contacts,
       @required this.onNavigation,
-      @required this.onDelete});
+      @required this.onDelete,
+      this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
     final controller = Modular.get<ContactListController>();
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
+    if (isLoading) {
+      return Container();
+    }
+
     if (contacts == null) {
       return Center(
         child: CircularProgressIndicator(),

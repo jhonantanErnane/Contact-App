@@ -43,6 +43,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         return CustomLoadingWidget(
           isLoading: controller.isLoading,
           child: ContactListWidget(
+            isLoading: controller.isLoading,
             contacts: controller.contacts,
             onNavigation: controller.onNavigation,
             onDelete: controller.delContact,
