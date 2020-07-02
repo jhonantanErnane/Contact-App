@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:contact_app/app/shared/widgets/contact_list/contact_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import '../../models/contact.dart';
 
 class ContactListWidget extends StatelessWidget {
-  Offset _tapPosition;
   final Function(Map<dynamic, dynamic>) onNavigation;
   final Function(int id) onDelete;
 
@@ -15,13 +15,9 @@ class ContactListWidget extends StatelessWidget {
       @required this.onNavigation,
       @required this.onDelete});
 
-  void _onTapDown(TapDownDetails details) {
-    _tapPosition = details.globalPosition;
-    print(_tapPosition);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Modular.get<ContactListController>();
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
     if (contacts == null) {
       return Center(
@@ -37,7 +33,7 @@ class ContactListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         Contact contact = contacts[index];
         return GestureDetector(
-          onTapDown: _onTapDown,
+          onTapDown: controller.onTapDown,
           onLongPress: () {
             showMenu(
               context: context,
@@ -69,10 +65,7 @@ class ContactListWidget extends StatelessWidget {
                   ),
                 ),
               ],
-              position: RelativeRect.fromRect(
-                _tapPosition & Size(40, 40), // smaller rect, the touch area
-                Offset.zero & overlay.size, // Bigger rect, the entire screen
-              ),
+              position: controller.getRelativeRect(overlay),
             );
           },
           child: Container(
