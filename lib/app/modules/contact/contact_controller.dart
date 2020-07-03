@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:mobx/mobx.dart';
@@ -19,6 +20,8 @@ abstract class _ContactControllerBase with Store {
   @observable
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   GlobalKey flatKey = GlobalKey();
+
+  final fbKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController txName = TextEditingController();
   final TextEditingController txPhone = TextEditingController();
@@ -76,7 +79,7 @@ abstract class _ContactControllerBase with Store {
   }
 
   @action
-  String validatePhone(String phone) {
+  String validatePhone(dynamic phone) {
     String _msg;
 
     if (!maskFormatter.isFill()) {

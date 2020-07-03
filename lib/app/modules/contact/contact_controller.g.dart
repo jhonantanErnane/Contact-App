@@ -73,7 +73,7 @@ mixin _$ContactController on _ContactControllerBase, Store {
   }
 
   @override
-  String validatePhone(String phone) {
+  String validatePhone(dynamic phone) {
     final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
         name: '_ContactControllerBase.validatePhone');
     try {
