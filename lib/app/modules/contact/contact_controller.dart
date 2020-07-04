@@ -29,6 +29,16 @@ abstract class _ContactControllerBase with Store {
 
   Contact contact = Contact();
 
+  // Palliative way to make a input auto validate when necessary, and not when input not was interact by user
+  //FIXME: Is there already a PR for this solution in Flutter repository, when it's goes merged review this validation
+  // https://github.com/flutter/flutter/pull/59766
+
+  @observable
+  bool inputNameAutoValidate = false;
+
+  @observable
+  bool inputPhoneAutoValidate = false;
+
   @observable
   dynamic photo;
 
@@ -48,6 +58,16 @@ abstract class _ContactControllerBase with Store {
     this.contact =
         await _storage.getContact(int.parse(Modular.args.params['id']));
     if (contact != null) setContact(contact);
+  }
+
+  @action
+  void setInputNameAutoValidate() {
+    inputNameAutoValidate = txName.text != null;
+  }
+
+  @action
+  void setInputPhoneAutoValidate() {
+    inputPhoneAutoValidate = txPhone.text != null;
   }
 
   @action

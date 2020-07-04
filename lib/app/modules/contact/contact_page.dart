@@ -30,18 +30,24 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     final List<Widget> components = List<Widget>();
 
     // name field
-    components.add(TextFormField(
-      controller: controller.txName,
-      keyboardType: TextInputType.text,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(45),
-      ],
-      validator: controller.validateName,
-      decoration: InputDecoration(
-        labelText: 'Nome',
-        icon: Icon(Icons.person),
-      ),
-    ));
+    components.add(Observer(builder: (_) {
+      return TextFormField(
+        controller: controller.txName,
+        keyboardType: TextInputType.text,
+        autovalidate: controller.inputNameAutoValidate,
+        onChanged: (_) {
+          controller.setInputNameAutoValidate();
+        },
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(45),
+        ],
+        validator: controller.validateName,
+        decoration: InputDecoration(
+          labelText: 'Nome',
+          icon: Icon(Icons.person),
+        ),
+      );
+    }));
 
     // nickName field
     components.add(TextField(
@@ -70,18 +76,24 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
     ));
 
     // phone field
-    components.add(TextFormField(
-      controller: controller.txPhone,
-      inputFormatters: [
-        controller.maskFormatter,
-      ],
-      keyboardType: TextInputType.phone,
-      validator: controller.validatePhone,
-      decoration: InputDecoration(
-        labelText: "Telefone",
-        icon: Icon(Icons.phone),
-      ),
-    ));
+    components.add(Observer(builder: (_) {
+      return TextFormField(
+        controller: controller.txPhone,
+        inputFormatters: [
+          controller.maskFormatter,
+        ],
+        keyboardType: TextInputType.phone,
+        validator: controller.validatePhone,
+        autovalidate: controller.inputPhoneAutoValidate,
+        onChanged: (_) {
+          controller.setInputPhoneAutoValidate();
+        },
+        decoration: InputDecoration(
+          labelText: "Telefone",
+          icon: Icon(Icons.phone),
+        ),
+      );
+    }));
 
     // email field
     components.add(TextField(
@@ -159,8 +171,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
       ],
     );
 
-    Form form =
-        Form(key: controller.formKey, autovalidate: true, child: content);
+    Form form = Form(key: controller.formKey, child: content);
 
     return Scaffold(
         appBar: AppBar(

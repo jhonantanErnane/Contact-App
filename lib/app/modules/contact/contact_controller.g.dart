@@ -32,6 +32,40 @@ mixin _$ContactController on _ContactControllerBase, Store {
     });
   }
 
+  final _$inputNameAutoValidateAtom =
+      Atom(name: '_ContactControllerBase.inputNameAutoValidate');
+
+  @override
+  bool get inputNameAutoValidate {
+    _$inputNameAutoValidateAtom.reportRead();
+    return super.inputNameAutoValidate;
+  }
+
+  @override
+  set inputNameAutoValidate(bool value) {
+    _$inputNameAutoValidateAtom.reportWrite(value, super.inputNameAutoValidate,
+        () {
+      super.inputNameAutoValidate = value;
+    });
+  }
+
+  final _$inputPhoneAutoValidateAtom =
+      Atom(name: '_ContactControllerBase.inputPhoneAutoValidate');
+
+  @override
+  bool get inputPhoneAutoValidate {
+    _$inputPhoneAutoValidateAtom.reportRead();
+    return super.inputPhoneAutoValidate;
+  }
+
+  @override
+  set inputPhoneAutoValidate(bool value) {
+    _$inputPhoneAutoValidateAtom
+        .reportWrite(value, super.inputPhoneAutoValidate, () {
+      super.inputPhoneAutoValidate = value;
+    });
+  }
+
   final _$photoAtom = Atom(name: '_ContactControllerBase.photo');
 
   @override
@@ -49,6 +83,28 @@ mixin _$ContactController on _ContactControllerBase, Store {
 
   final _$_ContactControllerBaseActionController =
       ActionController(name: '_ContactControllerBase');
+
+  @override
+  void setInputNameAutoValidate() {
+    final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
+        name: '_ContactControllerBase.setInputNameAutoValidate');
+    try {
+      return super.setInputNameAutoValidate();
+    } finally {
+      _$_ContactControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setInputPhoneAutoValidate() {
+    final _$actionInfo = _$_ContactControllerBaseActionController.startAction(
+        name: '_ContactControllerBase.setInputPhoneAutoValidate');
+    try {
+      return super.setInputPhoneAutoValidate();
+    } finally {
+      _$_ContactControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setContact(Contact c) {
@@ -87,6 +143,8 @@ mixin _$ContactController on _ContactControllerBase, Store {
   String toString() {
     return '''
 formKey: ${formKey},
+inputNameAutoValidate: ${inputNameAutoValidate},
+inputPhoneAutoValidate: ${inputPhoneAutoValidate},
 photo: ${photo},
 canSaveContact: ${canSaveContact}
     ''';
