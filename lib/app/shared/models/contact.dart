@@ -10,7 +10,6 @@ class Contact {
   String phoneNumber;
   String email;
   String webSite;
-  String created;
 
   Contact({
     this.id,
@@ -22,7 +21,6 @@ class Contact {
     this.phoneNumber,
     this.email,
     this.webSite,
-    this.created,
   });
 
   Contact.fromContactModel(ContactModel c) {
@@ -35,7 +33,6 @@ class Contact {
     this.phoneNumber = c.phoneNumber;
     this.email = c.email;
     this.webSite = c.webSite;
-    this.created = c.created;
   }
 
   Contact.fromJson(Map<String, dynamic> json) {
@@ -48,7 +45,6 @@ class Contact {
     phoneNumber = json['phoneNumber'];
     email = json['email'];
     webSite = json['webSite'];
-    created = json['created'];
   }
 
   Map<String, dynamic> toJson() {
@@ -62,7 +58,6 @@ class Contact {
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
     data['webSite'] = this.webSite;
-    data['created'] = this.created;
     return data;
   }
 }

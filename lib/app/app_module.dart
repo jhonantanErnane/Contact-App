@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import './app_controller.dart';
 import './modules/about/about_module.dart';
 import './modules/contact/contact_module.dart';
-import './shared/repositories/local_repository/local_repository_hive.dart';
+import './shared/repositories/local_repository/local_repository_Sqlite.dart';
 import './app_widget.dart';
 import './modules/home/home_module.dart';
 import './shared/repositories/repository_interface.dart';
@@ -14,7 +14,7 @@ class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
         Bind((i) => AppController()),
-        Bind<ILocalRepository>((i) => LocalStorageHive()),
+        Bind<ILocalRepository>((i) => LocalStorageSqlite()),
       ];
 
   @override

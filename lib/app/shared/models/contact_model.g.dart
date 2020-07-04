@@ -25,14 +25,13 @@ class ContactModelAdapter extends TypeAdapter<ContactModel> {
       phoneNumber: fields[6] as String,
       email: fields[7] as String,
       webSite: fields[8] as String,
-      created: fields[9] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ContactModel obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
@@ -48,9 +47,7 @@ class ContactModelAdapter extends TypeAdapter<ContactModel> {
       ..writeByte(7)
       ..write(obj.email)
       ..writeByte(8)
-      ..write(obj.webSite)
-      ..writeByte(9)
-      ..write(obj.created);
+      ..write(obj.webSite);
   }
 
   @override
