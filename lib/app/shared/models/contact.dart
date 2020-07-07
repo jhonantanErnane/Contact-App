@@ -47,6 +47,18 @@ class Contact {
     webSite = json['webSite'];
   }
 
+  Contact.fromSql(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    nickName = json['nickName'];
+    work = json['work'];
+    isFavorite = json['isFavorite'] == 1;
+    photo = json['photo'];
+    phoneNumber = json['phoneNumber'];
+    email = json['email'];
+    webSite = json['webSite'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
@@ -54,6 +66,20 @@ class Contact {
     data['nickName'] = this.nickName;
     data['work'] = this.work;
     data['isFavorite'] = this.isFavorite;
+    data['photo'] = this.photo;
+    data['phoneNumber'] = this.phoneNumber;
+    data['email'] = this.email;
+    data['webSite'] = this.webSite;
+    return data;
+  }
+
+  Map<String, dynamic> toSql() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['nickName'] = this.nickName;
+    data['work'] = this.work;
+    data['isFavorite'] = this.isFavorite ? 1 : 0;
     data['photo'] = this.photo;
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;

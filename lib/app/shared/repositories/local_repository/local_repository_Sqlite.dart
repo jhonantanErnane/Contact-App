@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 const String DBNAME = 'flutter_contacts.db';
 const int DBVERSION = 1;
-
+const String TABLECONTACTS = 'contacts';
 // tb lista
 const List<String> dbCreate = [
   '''CREATE TABLE contacts(
@@ -31,11 +31,10 @@ class LocalStorageSqlite extends ILocalRepository {
   _init() async {
     var databasesPath = await getDatabasesPath();
     String path = databasesPath + DBNAME;
-    await deleteDatabase(path);
-    Database db =
-        await openDatabase(path, version: DBVERSION, onOpen: (Database db) {
-      print(db);
-    }, onCreate: (Database db, int version) async {
+    // await deleteDatabase(path);
+    Database db = await openDatabase(path,
+        version: DBVERSION,
+        onOpen: (Database db) {}, onCreate: (Database db, int version) async {
       dbCreate.forEach((String sql) async {
         try {
           await db.execute(sql);
@@ -48,10 +47,20 @@ class LocalStorageSqlite extends ILocalRepository {
   }
 
   @override
-  Future<void> addContact(Contact contact) async {}
+  Future<void> addContact(Contact contact) async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      await dbInstance.insert(TABLECONTACTS, contact.toSql());
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
-  Future<void> delContacts() async {}
+  Future<void> delContacts() async {
+    final dbInstance = await _dbInstance.future;
+    dbInstance.delete(TABLECONTACTS);
+  }
 
   /// Get all contacts
   ///
@@ -60,23 +69,61 @@ class LocalStorageSqlite extends ILocalRepository {
   Future<List<Contact>> getAllContacts([String name]) async {
     try {
       final dbInstance = await _dbInstance.future;
-      final contactsMap = await dbInstance.query('contacts');
-      print(contactsMap);
-      return [];
+      final contactsMap = await dbInstance.query(TABLECONTACTS);
+      return contactsMap.map((e) => Contact.fromSql(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   @override
-  Future<List<String>> searchAllContacts(String name) async {}
+  Future<List<String>> searchAllContacts(String name) async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      final suggestionsMap = await dbInstance.query(TABLECONTACTS,
+          columns: ['name'], where: 'name like ?', whereArgs: ['%$name%']);
+      return suggestionsMap.map((e) => e['name'].toString()).toList();
+    } catch (e) {
+      print(e);
+      return [''];
+    }
+  }
 
   @override
-  Future<Contact> getContact(int id) async {}
+  Future<Contact> getContact(int id) async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      final contactsMap = await dbInstance
+          .query(TABLECONTACTS, where: 'id == ?', whereArgs: [id]);
+      if (contactsMap.isNotEmpty) {
+        return Contact.fromSql(contactsMap.single);
+      } else {
+        return Contact();
+      }
+    } catch (e) {
+      print(e);
+      return Contact();
+    }
+  }
 
   @override
-  Future<void> putContact(Contact contact) async {}
+  Future<void> putContact(Contact contact) async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      dbInstance.update(TABLECONTACTS, contact.toSql(),
+          where: 'id == ?', whereArgs: [contact.id]);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
-  Future<void> deleteContact(int id) async {}
+  Future<void> deleteContact(int id) async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      dbInstance.delete(TABLECONTACTS, where: 'id == ?', whereArgs: [id]);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
