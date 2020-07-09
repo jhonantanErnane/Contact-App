@@ -1,3 +1,4 @@
+import 'package:contact_app/app/shared/custom_dio/custom_dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class AppModule extends MainModule {
   List<Bind> get binds => [
         Bind((i) => AppController()),
         Bind<ILocalRepository>((i) => LocalStorageSqlite()),
+        Bind<CustomDio>((i) => CustomDio.instance)
       ];
 
   @override

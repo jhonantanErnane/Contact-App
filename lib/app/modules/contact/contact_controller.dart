@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:contact_app/app/shared/custom_dio/custom_dio.dart';
+import 'package:contact_app/app/shared/custom_dio/custom_dio_builder/custom_dio_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,6 +17,7 @@ class ContactController = _ContactControllerBase with _$ContactController;
 
 abstract class _ContactControllerBase with Store {
   final _storage = Modular.get<ILocalRepository>();
+  final _customDio = Modular.get<CustomDio>();
 
   @observable
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -52,6 +55,14 @@ abstract class _ContactControllerBase with Store {
     if (Modular.args.params != null) {
       await _getContact();
     }
+    teste();
+  }
+
+  teste() async {
+    final t = await _customDio.client.get('posts/1');
+    print(t.data);
+    final f = await CustomDioBuilder.instance.get().path('posts/2').params().data(1).run();
+    print(f.data);
   }
 
   Future<void> _getContact() async {
