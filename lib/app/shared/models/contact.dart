@@ -10,6 +10,9 @@ class Contact {
   String phoneNumber;
   String email;
   String webSite;
+  String idServer;
+  bool wasSync;
+  bool active;
 
   Contact({
     this.id,
@@ -21,6 +24,9 @@ class Contact {
     this.phoneNumber,
     this.email,
     this.webSite,
+    this.idServer,
+    this.wasSync,
+    this.active,
   });
 
   Contact.fromContactModel(ContactModel c) {
@@ -33,6 +39,9 @@ class Contact {
     this.phoneNumber = c.phoneNumber;
     this.email = c.email;
     this.webSite = c.webSite;
+    this.idServer = c.idServer;
+    this.wasSync = c.wasSync;
+    this.active = c.active;
   }
 
   Contact.fromJson(Map<String, dynamic> json) {
@@ -45,6 +54,9 @@ class Contact {
     phoneNumber = json['phoneNumber'];
     email = json['email'];
     webSite = json['webSite'];
+    idServer = json['idServer'];
+    wasSync = json['wasSync'];
+    active = json['active'];
   }
 
   Contact.fromSql(Map<String, dynamic> json) {
@@ -57,6 +69,9 @@ class Contact {
     phoneNumber = json['phoneNumber'];
     email = json['email'];
     webSite = json['webSite'];
+    idServer = json['idServer'];
+    wasSync = json['wasSync'];
+    active = json['active'];
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +85,9 @@ class Contact {
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
     data['webSite'] = this.webSite;
+    data['idServer'] = this.idServer;
+    data['wasSync'] = this.wasSync;
+    data['active'] = this.active;
     return data;
   }
 
@@ -84,6 +102,9 @@ class Contact {
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
     data['webSite'] = this.webSite;
+    data['idServer'] = this.idServer;
+    data['wasSync'] = this.wasSync;
+    data['active'] = this.active;
     return data;
   }
 }

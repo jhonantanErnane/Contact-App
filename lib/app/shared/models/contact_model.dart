@@ -23,6 +23,12 @@ class ContactModel {
   String email;
   @HiveField(8)
   String webSite;
+  @HiveField(9)
+  String idServer;
+  @HiveField(10)
+  bool wasSync;
+  @HiveField(11)
+  bool active;
 
   ContactModel({
     this.id,
@@ -46,6 +52,9 @@ class ContactModel {
     this.phoneNumber = c.phoneNumber;
     this.email = c.email;
     this.webSite = c.webSite;
+    this.idServer = c.idServer;
+    this.wasSync = c.wasSync;
+    this.active = c.active;
   }
 
   ContactModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +67,9 @@ class ContactModel {
     phoneNumber = json['phoneNumber'];
     email = json['email'];
     webSite = json['webSite'];
+    idServer = json['idServer'];
+    wasSync = json['wasSync'];
+    active = json['active'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +83,9 @@ class ContactModel {
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
     data['webSite'] = this.webSite;
+    data['idServer'] = this.idServer;
+    data['wasSync'] = this.wasSync;
+    data['active'] = this.active;
     return data;
   }
 }
