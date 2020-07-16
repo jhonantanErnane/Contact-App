@@ -10,11 +10,13 @@ import './app_widget.dart';
 import './modules/home/home_module.dart';
 import './shared/repositories/repository_interface.dart';
 import 'modules/view_contact/view_contact_module.dart';
+import './shared/services/auth_service.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => AppController()),
+        Bind((i) => AppController(), lazy: false),
+        Bind<AuthService>((i) => AuthService.instance),
         Bind<ILocalRepository>((i) => LocalStorageSqlite()),
         Bind<CustomDio>((i) => CustomDio.instance)
       ];
