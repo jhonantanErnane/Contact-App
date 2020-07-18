@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 
+import 'authentication.dart';
+
+const BASEURL = 'http://192.168.0.25:5001/contact-app-56152/us-central1/api';
+
 class CustomDio {
   static CustomDio _instance;
 
@@ -14,12 +18,12 @@ class CustomDio {
 
   _init() {
     BaseOptions options = new BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com/',
+      baseUrl: BASEURL,
       connectTimeout: 5000,
       receiveTimeout: 3000,
     );
     final dio = Dio(options);
-    // dio.interceptors.add(element)
+    dio.interceptors.add(AuthenticationInterceptorDio.instance);
     return dio;
   }
 }
