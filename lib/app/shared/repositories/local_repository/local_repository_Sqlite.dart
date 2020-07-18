@@ -18,6 +18,9 @@ const List<String> dbCreate = [
       photo TEXT,
       phoneNumber TEXT,
       email TEXT,
+      idServer TEXT,
+      wasSync INTEGER,
+      active INTEGER,
       webSite TEXT)'''
 ];
 

@@ -70,8 +70,8 @@ class Contact {
     email = json['email'];
     webSite = json['webSite'];
     idServer = json['idServer'];
-    wasSync = json['wasSync'];
-    active = json['active'];
+    wasSync = json['wasSync'] == 1;
+    active = json['active'] == 1;
   }
 
   Map<String, dynamic> toJson() {
@@ -103,8 +103,8 @@ class Contact {
     data['email'] = this.email;
     data['webSite'] = this.webSite;
     data['idServer'] = this.idServer;
-    data['wasSync'] = this.wasSync;
-    data['active'] = this.active;
+    data['wasSync'] = this.wasSync?? 0;
+    data['active'] = this.active?? 0;
     return data;
   }
 }
