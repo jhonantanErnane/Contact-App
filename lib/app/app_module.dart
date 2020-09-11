@@ -1,4 +1,3 @@
-import 'package:contact_app/app/shared/custom_dio/custom_dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,7 @@ import './modules/home/home_module.dart';
 import './shared/repositories/repository_interface.dart';
 import 'modules/view_contact/view_contact_module.dart';
 import './shared/services/auth_service.dart';
+import './shared/custom_dio/custom_dio.dart';
 
 class AppModule extends MainModule {
   @override
