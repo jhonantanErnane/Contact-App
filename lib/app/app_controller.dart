@@ -13,6 +13,6 @@ abstract class _AppControllerBase with Store {
   }
 
   _init() {
-    _authService.loginFirebase();
+    // _authService.loginFirebase();
   }
 }

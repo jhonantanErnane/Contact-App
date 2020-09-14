@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'background_overlay.dart';
+
 class FabMenuWidget extends StatefulWidget {
   final Function onPressedAdd;
   final Function onPressedSettings;
@@ -93,28 +95,54 @@ class _FabMenuWidgetState extends State<FabMenuWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Transform(
-          transform: Matrix4.translationValues(
-            0,
-            _translateButton.value * 2,
-            0,
+    final children = [
+      renderOverlay(context),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Transform(
+            transform: Matrix4.translationValues(
+              0,
+              _translateButton.value * 2,
+              0,
+            ),
+            child: _add(),
           ),
-          child: _add(),
-        ),
-        Transform(
-          transform: Matrix4.translationValues(
-            0,
-            _translateButton.value,
-            0,
+          Transform(
+            transform: Matrix4.translationValues(
+              0,
+              _translateButton.value,
+              0,
+            ),
+            child: _settings(),
           ),
-          child: _settings(),
-        ),
-        _tooggle(),
-      ],
+          _tooggle(),
+        ],
+      )
+    ];
+
+    return Stack(
+      alignment: Alignment.bottomRight,
+      fit: StackFit.expand,
+      overflow: Overflow.visible,
+      children: children,
     );
+  }
+
+  Widget renderOverlay(BuildContext context) {
+    return Positioned(
+        right: -16,
+        bottom: -16,
+        left: 0,
+        top: 0,
+        child: GestureDetector(
+          onTap: _tooggle,
+          child: BackgroundOverlay(
+            animation: _animationController,
+            color: Theme.of(context).primaryColor,
+            opacity: 0.5,
+          ),
+        ));
   }
 }
