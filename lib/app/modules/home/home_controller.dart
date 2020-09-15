@@ -1,8 +1,8 @@
 import 'package:contact_app/app/shared/models/contact.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import '../../shared/repositories/repository_interface.dart';
 import 'dart:async';
+import '../../shared/repositories/repository_interface.dart';
 part 'home_controller.g.dart';
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -59,9 +59,8 @@ abstract class _HomeControllerBase with Store {
     final i = contacts.indexWhere((element) => element.id == contact.id);
     if (i != -1) {
       contacts = contacts
-          .map((element) => element.id == contact.id
-              ? element = contact
-              : element)
+          .map((element) =>
+              element.id == contact.id ? element = contact : element)
           .toList()
           .asObservable();
     }

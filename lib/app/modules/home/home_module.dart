@@ -1,13 +1,15 @@
-import 'package:contact_app/app/modules/home/home_controller.dart';
-import 'package:contact_app/app/shared/widgets/contact_list/contact_list_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:contact_app/app/modules/home/home_page.dart';
+import '../../modules/home/home_controller.dart';
+import '../../shared/widgets/config_modal/config_modal_controller.dart';
+import '../../shared/widgets/contact_list/contact_list_controller.dart';
+import '../../modules/home/home_page.dart';
 
 class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
         Bind((i) => ContactListController()),
         Bind((i) => HomeController()),
+        Bind((i) => ConfigModalController()),
       ];
 
   @override
