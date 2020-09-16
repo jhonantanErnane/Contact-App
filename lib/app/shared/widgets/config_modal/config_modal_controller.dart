@@ -16,7 +16,7 @@ abstract class _ConfigModalControllerBase with Store {
   }
 
   @observable
-  bool isSyncAuto;
+  bool isSyncAuto = false;
 
   @action
   Future<void> _getSync() async =>

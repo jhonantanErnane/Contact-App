@@ -10,13 +10,15 @@ class ConfigModalWidget extends StatelessWidget {
     final controller = Modular.get<ConfigModalController>();
 
     return Dialog(
+      insetPadding: const EdgeInsets.all(16),
       child: Container(
-        padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text('Configurações'),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text('Sincronizar automaticamente: '),
                 Observer(builder: (_) {
@@ -25,7 +27,38 @@ class ConfigModalWidget extends StatelessWidget {
                       onChanged: controller.toggleSync);
                 })
               ],
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Observer(builder: (context) {
+              return controller.isSyncAuto
+                  ? Container()
+                  : RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      onPressed: () {},
+                      color: Colors.indigoAccent,
+                      textColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(Icons.sync),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Sincronizar',
+                                style: TextStyle(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+            })
           ],
         ),
       ),

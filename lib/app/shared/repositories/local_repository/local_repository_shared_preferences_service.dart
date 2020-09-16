@@ -29,7 +29,7 @@ class LocalRepositorySharedPreferencesService extends Disposable {
 
   Future<bool> getAutoSync() async {
     await _getInstance();
-    return _preferences.getBool(ISAUTOSYNCKEY);
+    return _preferences.getBool(ISAUTOSYNCKEY) ?? false;
   }
 
   @override
