@@ -9,27 +9,20 @@ part of 'config_modal_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ConfigModalController on _ConfigModalControllerBase, Store {
-  final _$isSyncAutoAtom = Atom(name: '_ConfigModalControllerBase.isSyncAuto');
+  final _$isSyncAutoStreamAtom =
+      Atom(name: '_ConfigModalControllerBase.isSyncAutoStream');
 
   @override
-  bool get isSyncAuto {
-    _$isSyncAutoAtom.reportRead();
-    return super.isSyncAuto;
+  ObservableStream<bool> get isSyncAutoStream {
+    _$isSyncAutoStreamAtom.reportRead();
+    return super.isSyncAutoStream;
   }
 
   @override
-  set isSyncAuto(bool value) {
-    _$isSyncAutoAtom.reportWrite(value, super.isSyncAuto, () {
-      super.isSyncAuto = value;
+  set isSyncAutoStream(ObservableStream<bool> value) {
+    _$isSyncAutoStreamAtom.reportWrite(value, super.isSyncAutoStream, () {
+      super.isSyncAutoStream = value;
     });
-  }
-
-  final _$_getSyncAsyncAction =
-      AsyncAction('_ConfigModalControllerBase._getSync');
-
-  @override
-  Future<void> _getSync() {
-    return _$_getSyncAsyncAction.run(() => super._getSync());
   }
 
   final _$toggleSyncAsyncAction =
@@ -43,7 +36,7 @@ mixin _$ConfigModalController on _ConfigModalControllerBase, Store {
   @override
   String toString() {
     return '''
-isSyncAuto: ${isSyncAuto}
+isSyncAutoStream: ${isSyncAutoStream}
     ''';
   }
 }

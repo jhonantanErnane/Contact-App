@@ -23,7 +23,7 @@ class ConfigModalWidget extends StatelessWidget {
                 Text('Sincronizar automaticamente: '),
                 Observer(builder: (_) {
                   return Switch(
-                      value: controller.isSyncAuto ?? false,
+                      value: controller.isSyncAutoStream.value ?? false,
                       onChanged: controller.toggleSync);
                 })
               ],
@@ -32,7 +32,7 @@ class ConfigModalWidget extends StatelessWidget {
               height: 10,
             ),
             Observer(builder: (context) {
-              return controller.isSyncAuto
+              return controller.isSyncAutoStream.value
                   ? Container()
                   : RaisedButton(
                       shape: RoundedRectangleBorder(

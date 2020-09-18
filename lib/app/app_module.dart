@@ -11,10 +11,12 @@ import 'modules/view_contact/view_contact_module.dart';
 import './shared/services/auth_service.dart';
 import './shared/custom_dio/custom_dio.dart';
 import './shared/repositories/local_repository/local_repository_shared_preferences_service.dart';
+import 'shared/services/sync_service.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        $SyncService,
         Bind((i) => AppController(), lazy: false),
         Bind<AuthService>((i) => AuthService.instance),
         Bind<ILocalRepository>((i) => LocalStorageSqlite()),
