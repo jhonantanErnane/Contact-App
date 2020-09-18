@@ -9,10 +9,10 @@ class ContactModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(Modular.initialRoute, child: (_, args) => ContactPage()),
-        Router('/add', child: (_, args) => ContactPage()),
-        Router('/edit/:id', child: (_, args) => ContactPage()),
+  List<ModularRouter> get routers => [
+        ModularRouter(Modular.initialRoute, child: (_, args) => ContactPage()),
+        ModularRouter('/add', child: (_, args) => ContactPage()),
+        ModularRouter('/edit/:id', child: (_, args) => ContactPage()),
       ];
 
   static Inject get to => Inject<ContactModule>.of();

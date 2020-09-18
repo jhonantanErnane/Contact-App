@@ -9,8 +9,8 @@ class AboutModule extends ChildModule {
       ];
 
   @override
-  List<Router> get routers => [
-        Router(Modular.initialRoute, child: (_, args) => AboutPage()),
+  List<ModularRouter> get routers => [
+        ModularRouter(Modular.initialRoute, child: (_, args) => AboutPage()),
       ];
 
   static Inject get to => Inject<AboutModule>.of();
