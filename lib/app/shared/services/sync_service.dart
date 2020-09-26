@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/subjects.dart';
+
+import '../repositories/repository_interface.dart';
 import '../repositories/local_repository/local_repository_shared_preferences_service.dart';
 
 part 'sync_service.g.dart';
@@ -8,6 +10,7 @@ part 'sync_service.g.dart';
 class SyncService extends Disposable {
   final _localRepositoryService =
       Modular.get<LocalRepositorySharedPreferencesService>();
+  final _storage = Modular.get<ILocalRepository>();
 
   final _isSyncAutoCtrl = BehaviorSubject<bool>();
 
@@ -22,9 +25,20 @@ class SyncService extends Disposable {
 
   Stream<bool> get isSyncAutoOut => _isSyncAutoCtrl.stream;
 
-  void setIsSyncAuto(bool a) {
-    _isSyncAuto = a;
-    _isSyncAutoCtrl.add(a);
+  void setIsSyncAuto(bool isSyncAuto) {
+    _isSyncAuto = isSyncAuto;
+    _isSyncAutoCtrl.add(isSyncAuto);
+  }
+
+  synchronizing() async {
+    // For sync first send all
+    List<String> listContactIds = await _storage.getContactsNotSync();
+    if (listContactIds.length > 0) {
+      //send all contacts
+    }
+    // get all contacts that not already is in the device
+    listContactIds = await _storage.getAllContactsIds();
+    
   }
 
   @override

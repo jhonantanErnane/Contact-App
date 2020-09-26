@@ -2,13 +2,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 import '../../shared/custom_dio/custom_dio.dart';
-import '../../shared/repositories/repository_interface.dart';
-import '../../shared/custom_dio/custom_dio_builder/custom_dio_builder.dart';
 import 'dart:async';
 
 class AuthService extends Disposable {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final _storage = Modular.get<ILocalRepository>();
 
   static AuthService _instance;
   StreamSubscription _streamSubscription;
@@ -29,12 +26,13 @@ class AuthService extends Disposable {
   _authStateChanged() {
     _streamSubscription =
         _auth.onAuthStateChanged.listen((FirebaseUser user) async {
-      if (user != null) {
+      if (user == null) {
+        _loginFirebase();
+      } else {
         try {
           final idTokenResult = await user.getIdToken();
           this.token = idTokenResult.token;
-          await getUser();
-          testPostContact();
+          await _getUser();
         } catch (e) {
           print(e);
         }
@@ -42,22 +40,7 @@ class AuthService extends Disposable {
     });
   }
 
-  testPostContact() async {
-    try {
-      final contact = await _storage.getContact(1);
-      final f = await CustomDioBuilder.instance
-          .post()
-          .path('/contacts')
-          .params()
-          .data(contact.toJson())
-          .run();
-      print(f);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> getUser() async {
+  Future<void> _getUser() async {
     final _customDio = Modular.get<CustomDio>();
     try {
       final userResp = await _customDio.client.get('/user');
@@ -67,7 +50,7 @@ class AuthService extends Disposable {
     }
   }
 
-  loginFirebase() async {
+  _loginFirebase() async {
     FirebaseUser user = await _auth.currentUser();
     if (user == null) {
       final result = await _auth.signInAnonymously();

@@ -1,3 +1,4 @@
+import 'shared/services/contact_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import './app_controller.dart';
@@ -16,6 +17,7 @@ import 'shared/services/sync_service.dart';
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        $ContactService,
         $SyncService,
         Bind((i) => AppController(), lazy: false),
         Bind<AuthService>((i) => AuthService.instance),
