@@ -82,7 +82,7 @@ class LocalStorageHive implements ILocalRepository {
   }
 
   @override
-  Future<List<String>> getContactsNotSync() {
+  Future<List<int>> getContactsNotSync() {
     // TODO: implement getContactsNotSync
     throw UnimplementedError();
   }

@@ -18,7 +18,7 @@ abstract class ILocalRepository {
   /// Delete all contacts
   Future<void> delContacts();
   /// Get the contacts ids that wasn't sync
-  Future<List<String>> getContactsNotSync();
+  Future<List<int>> getContactsNotSync();
   /// Get all contacts ids that's in the device
   Future<List<String>> getAllContactsIds();
 

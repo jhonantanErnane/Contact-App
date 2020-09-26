@@ -24,4 +24,8 @@ abstract class _ConfigModalControllerBase with Store {
     _syncService.setIsSyncAuto(toggle);
   }
 
+  testSync() {
+    _syncService.synchronizing();
+  }
+
 }

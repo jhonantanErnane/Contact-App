@@ -135,6 +135,8 @@ abstract class _ContactControllerBase with Store {
       contact.webSite = txWebsite.text;
       contact.work = txWork.text;
       contact.email = txEmail.text;
+      contact.active = true;
+      contact.wasSync = false;
 
       if (base64Image.isNotEmpty) {
         photo = base64Decode(base64Image);

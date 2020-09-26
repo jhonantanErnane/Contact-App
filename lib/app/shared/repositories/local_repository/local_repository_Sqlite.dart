@@ -33,7 +33,7 @@ class LocalStorageSqlite extends ILocalRepository {
 
   _init() async {
     var databasesPath = await getDatabasesPath();
-    String path = databasesPath + DBNAME;
+    String path = databasesPath + '/' + DBNAME;
     // await deleteDatabase(path);
     Database db = await openDatabase(path,
         version: DBVERSION,
@@ -131,15 +131,17 @@ class LocalStorageSqlite extends ILocalRepository {
   }
 
   @override
-  Future<List<String>> getContactsNotSync() async {
+  Future<List<int>> getContactsNotSync() async {
     final dbInstance = await _dbInstance.future;
     try {
-      final result = await dbInstance.query(TABLECONTACTS,
-          columns: ['idServer'], where: 'idServer IS NULL');
-      return result.map((e) => e['idServer'].toString()).toList();
+      final res = await dbInstance.query(TABLECONTACTS,
+          columns: ['id'],
+          where: 'wasSync IS NULL OR wasSync == ?',
+          whereArgs: [0]);
+      return res.map<int>((e) => e['id']).toList();
     } catch (e) {
       print(e);
-      return [''];
+      return [];
     }
   }
 

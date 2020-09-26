@@ -103,8 +103,8 @@ class Contact {
     data['email'] = this.email;
     data['webSite'] = this.webSite;
     data['idServer'] = this.idServer;
-    data['wasSync'] = this.wasSync?? 0;
-    data['active'] = this.active?? 0;
+    data['wasSync'] = this.wasSync ? 1 : 0;
+    data['active'] = this.active ? 1 : 0;
     return data;
   }
 }
