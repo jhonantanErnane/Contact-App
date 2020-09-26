@@ -80,4 +80,16 @@ class LocalStorageHive implements ILocalRepository {
     var boxContact = await _instance.future;
     boxContact.deleteAt(id);
   }
+
+  @override
+  Future<List<String>> getContactsNotSync() {
+    // TODO: implement getContactsNotSync
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<String>> getAllContactsIds() {
+    // TODO: implement getAllContactsIds
+    throw UnimplementedError();
+  }
 }

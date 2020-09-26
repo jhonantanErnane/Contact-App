@@ -129,4 +129,30 @@ class LocalStorageSqlite extends ILocalRepository {
       print(e);
     }
   }
+
+  @override
+  Future<List<String>> getContactsNotSync() async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      final result = await dbInstance.query(TABLECONTACTS,
+          columns: ['idServer'], where: 'idServer IS NULL');
+      return result.map((e) => e['idServer'].toString()).toList();
+    } catch (e) {
+      print(e);
+      return [''];
+    }
+  }
+
+  @override
+  Future<List<String>> getAllContactsIds() async {
+    final dbInstance = await _dbInstance.future;
+    try {
+      final result =
+          await dbInstance.query(TABLECONTACTS, columns: ['idServer']);
+      return result.map((e) => e['idServer'].toString()).toList();
+    } catch (e) {
+      print(e);
+      return [''];
+    }
+  }
 }

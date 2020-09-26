@@ -1,5 +1,3 @@
-
-
 import 'headers_interface.dart';
 
 abstract class PathInterface {

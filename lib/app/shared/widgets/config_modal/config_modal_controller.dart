@@ -1,7 +1,6 @@
 import 'package:contact_app/app/shared/services/sync_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-// import '../../repositories/local_repository/local_repository_shared_preferences_service.dart';
 
 part 'config_modal_controller.g.dart';
 
