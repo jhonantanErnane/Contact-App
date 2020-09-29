@@ -37,7 +37,7 @@ class ConfigModalWidget extends StatelessWidget {
                   : RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50)),
-                      onPressed: controller.testSync,
+                      onPressed: controller.syncManually,
                       color: Colors.indigoAccent,
                       textColor: Colors.white,
                       child: Padding(

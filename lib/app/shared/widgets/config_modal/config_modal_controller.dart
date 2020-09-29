@@ -1,19 +1,19 @@
-import 'package:contact_app/app/shared/services/sync_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../services/sync_service.dart';
+import '../../models/sync_event_enum.dart';
 part 'config_modal_controller.g.dart';
 
 class ConfigModalController = _ConfigModalControllerBase
     with _$ConfigModalController;
 
 abstract class _ConfigModalControllerBase with Store {
-
-  final _syncService =
-      Modular.get<SyncService>();
+  final _syncService = Modular.get<SyncService>();
 
   _ConfigModalControllerBase() {
-    isSyncAutoStream = ObservableStream(_syncService.isSyncAutoOut, initialValue: false);
+    isSyncAutoStream =
+        ObservableStream(_syncService.isSyncAutoOut, initialValue: false);
   }
 
   @observable
@@ -24,8 +24,16 @@ abstract class _ConfigModalControllerBase with Store {
     _syncService.setIsSyncAuto(toggle);
   }
 
-  testSync() {
-    _syncService.synchronizing();
-  }
+  syncManually() {
+    Modular.to.pop({'syncManually': true});
 
+    // TODO: Move to another dialog to show the progress of the send
+    _syncService.startSync
+        .takeWhile((element) => element.eventEnum != SyncEventEnum.ENDED)
+        .listen(
+      (event) {
+        print(event.message);
+      },
+    );
+  }
 }

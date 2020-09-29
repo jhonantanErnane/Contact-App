@@ -21,43 +21,45 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, kToolbarHeight),
-          child: AppBar(
-            title: Text("Contatos"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () async {
-                  await showSearch(
-                      context: context,
-                      delegate: SearchContact(
-                        onNavigation: controller.onNavigation,
-                        onDelete: controller.delContact,
-                      ));
-                },
-              ),
-            ],
-          )),
-      body: Observer(builder: (_) {
-        return CustomLoadingWidget(
-          isLoading: controller.isLoading,
-          child: ContactListWidget(
+        appBar: PreferredSize(
+            preferredSize: const Size(double.infinity, kToolbarHeight),
+            child: AppBar(
+              title: Text("Contatos"),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () async {
+                    await showSearch(
+                        context: context,
+                        delegate: SearchContact(
+                          onNavigation: controller.onNavigation,
+                          onDelete: controller.delContact,
+                        ));
+                  },
+                ),
+              ],
+            )),
+        body: Observer(builder: (_) {
+          return CustomLoadingWidget(
             isLoading: controller.isLoading,
-            contacts: controller.contacts,
-            onNavigation: controller.onNavigation,
-            onDelete: controller.delContact,
-          ),
-        );
-      }),
-      floatingActionButton: FabMenuWidget(
-          onPressedAdd: () async {
-            final param = await Modular.to.pushNamed('contacts/add') as Map;
-            controller.onNavigation(param);
-            // await controller.delContacts();
-          },
-          onPressedSettings: () => showDialog(
-              context: context, builder: (_) => ConfigModalWidget())),
-    );
+            child: ContactListWidget(
+              isLoading: controller.isLoading,
+              contacts: controller.contacts,
+              onNavigation: controller.onNavigation,
+              onDelete: controller.delContact,
+            ),
+          );
+        }),
+        floatingActionButton: FabMenuWidget(onPressedAdd: () async {
+          final param = await Modular.to.pushNamed('contacts/add') as Map;
+          controller.onNavigation(param);
+          // await controller.delContacts();
+        }, onPressedSettings: () async {
+          final resp = await showDialog(
+              context: context, builder: (_) => ConfigModalWidget());
+          if (resp != null && resp.syncManually) {
+            // TODO: Make another dialog to show the progress of the send
+          }
+        }));
   }
 }

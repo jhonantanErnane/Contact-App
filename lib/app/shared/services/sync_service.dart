@@ -1,7 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../models/sync_event_enum.dart';
 import '../models/contact.dart';
+import '../models/sync_event_model.dart';
 import '../repositories/repository_interface.dart';
 import '../repositories/local_repository/local_repository_shared_preferences_service.dart';
 import 'contact_service.dart';
@@ -16,6 +18,7 @@ class SyncService extends Disposable {
   final _contactService = Modular.get<ContactService>();
 
   final _isSyncAutoCtrl = BehaviorSubject<bool>();
+  final _synchronizingCtrl = BehaviorSubject<SyncEvent>();
 
   SyncService() {
     _init();
@@ -33,16 +36,30 @@ class SyncService extends Disposable {
     _isSyncAutoCtrl.add(isSyncAuto);
   }
 
-  synchronizing() async {
+  Stream<SyncEvent> get startSync {
+    _synchronizing();
+    return _synchronizingCtrl.stream;
+  }
+
+  Future _synchronizing() async {
+    _synchronizingCtrl.add(SyncEvent(message: 'Iniciou...', eventEnum: SyncEventEnum.STARTED));
+    await Future.delayed(Duration(seconds: 3));
     // For sync first send all
     List<int> listContactIds = await _storage.getContactsNotSync();
+    _synchronizingCtrl.add(SyncEvent(message:'${listContactIds.length} contatos a serem sincronizados...'));
+    await Future.delayed(Duration(seconds: 3));
     if (listContactIds.length > 0) {
       //send all contacts
+      int contactsSynced = 0;
       for (int id in listContactIds) {
         Contact contactUpdated = await _contactService.sendContact(id);
         await _storage.putContact(contactUpdated);
+        contactsSynced++;
+        _synchronizingCtrl.add(SyncEvent(message:'$contactsSynced / ${listContactIds.length}', eventEnum: SyncEventEnum.ENDED));
+        await Future.delayed(Duration(seconds: 3));
       }
     }
+
     // get all contacts that not already is in the device
     // List<String> ids = await _storage.getAllContactsIds();
   }
@@ -50,5 +67,6 @@ class SyncService extends Disposable {
   @override
   void dispose() {
     _isSyncAutoCtrl.close();
+    _synchronizingCtrl.close();
   }
 }
