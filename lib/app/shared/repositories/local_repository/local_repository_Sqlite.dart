@@ -24,7 +24,7 @@ const List<String> dbCreate = [
       webSite TEXT)'''
 ];
 
-class LocalStorageSqlite extends ILocalRepository {
+class LocalStorageSqlite implements ILocalRepository {
   Completer<Database> _dbInstance = Completer<Database>();
 
   LocalStorageSqlite() {

@@ -99,7 +99,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+## Slidy Scripts 
 scripts:
   watch: flutter pub run build_runner watch --delete-conflicting-outputs
   clean: flutter pub run build_runner clean
   build: flutter pub run build_runner build --delete-conflicting-outputs
+  pubget: flutter pub get 

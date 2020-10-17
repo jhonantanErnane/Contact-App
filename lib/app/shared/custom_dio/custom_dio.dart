@@ -19,8 +19,8 @@ class CustomDio {
   _init() {
     BaseOptions options = new BaseOptions(
       baseUrl: BASEURL,
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
+      connectTimeout: 35000,
+      // receiveTimeout: 3000,
     );
     final dio = Dio(options);
     dio.interceptors.add(AuthenticationInterceptorDio.instance);

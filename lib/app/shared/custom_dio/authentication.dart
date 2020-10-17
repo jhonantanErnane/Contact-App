@@ -20,7 +20,8 @@ class AuthenticationInterceptorDio implements InterceptorsWrapper {
 
   @override
   Future onRequest(RequestOptions options) async {
-    options.headers['Authorization'] = 'Bearer ${_authService.token}';
+    final token = await _authService.getToken();
+    options.headers['Authorization'] = 'Bearer $token';
     return options;
   }
 
