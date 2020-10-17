@@ -55,15 +55,15 @@ abstract class _ContactControllerBase with Store {
     if (Modular.args.params != null) {
       await _getContact();
     }
-    teste();
+    // teste();
   }
 
-  teste() async {
-    final t = await _customDio.client.get('posts/1');
-    print(t.data);
-    final f = await CustomDioBuilder.instance.get().path('posts/2').params().data(1).run();
-    print(f.data);
-  }
+  // teste() async {
+  //   final t = await _customDio.client.get('posts/1');
+  //   print(t.data);
+  //   final f = await CustomDioBuilder.instance.get().path('posts/2').params().data(1).run();
+  //   print(f.data);
+  // }
 
   Future<void> _getContact() async {
     this.contact =
