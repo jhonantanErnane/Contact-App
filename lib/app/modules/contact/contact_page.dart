@@ -10,15 +10,13 @@ import 'contact_controller.dart';
 
 class ContactPage extends StatefulWidget {
   final String title;
-  const ContactPage({this.title = "Contact"});
+  const ContactPage({this.title = 'Contact'});
 
   @override
   _ContactPageState createState() => _ContactPageState();
 }
 
 class _ContactPageState extends ModularState<ContactPage, ContactController> {
-  //use 'controller' variable to access controller
-
   @override
   void initState() {
     super.initState();
@@ -34,10 +32,7 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
       return TextFormField(
         controller: controller.txName,
         keyboardType: TextInputType.text,
-        autovalidate: controller.inputNameAutoValidate,
-        onChanged: (_) {
-          controller.setInputNameAutoValidate();
-        },
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         inputFormatters: [
           LengthLimitingTextInputFormatter(45),
         ],
@@ -75,6 +70,8 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
       ),
     ));
 
+    // TODO: There is a bug in the phone field
+    // but have a PR for this bug https://github.com/flutter/flutter/pull/67892
     // phone field
     components.add(Observer(builder: (_) {
       return TextFormField(
@@ -84,12 +81,9 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
         ],
         keyboardType: TextInputType.phone,
         validator: controller.validatePhone,
-        autovalidate: controller.inputPhoneAutoValidate,
-        onChanged: (_) {
-          controller.setInputPhoneAutoValidate();
-        },
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          labelText: "Telefone",
+          labelText: 'Telefone',
           icon: Icon(Icons.phone),
         ),
       );
@@ -171,7 +165,10 @@ class _ContactPageState extends ModularState<ContactPage, ContactController> {
       ],
     );
 
-    Form form = Form(key: controller.formKey, child: content);
+    Form form = Form(
+      key: controller.formKey,
+      child: content,
+    );
 
     return Scaffold(
         appBar: AppBar(
