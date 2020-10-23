@@ -1,3 +1,3 @@
 enum SyncEventEnum {
-  STARTED, ENDED
+  STARTED,SYNCING, ENDED
 }

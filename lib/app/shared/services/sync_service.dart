@@ -41,24 +41,33 @@ class SyncService extends Disposable {
     return _synchronizingCtrl.stream;
   }
 
-  Future _synchronizing() async {
-    _synchronizingCtrl.add(SyncEvent(message: 'Iniciou...', eventEnum: SyncEventEnum.STARTED));
+  Future<void> _synchronizing() async {
+    _synchronizingCtrl.add(
+        SyncEvent(message: 'Iniciou...', eventEnum: SyncEventEnum.STARTED));
     await Future.delayed(Duration(seconds: 3));
     // For sync first send all
     List<int> listContactIds = await _storage.getContactsNotSync();
-    _synchronizingCtrl.add(SyncEvent(message:'${listContactIds.length} contatos a serem sincronizados...'));
+    _synchronizingCtrl.add(SyncEvent(
+        message: '${listContactIds.length} contatos a serem sincronizados...'));
     await Future.delayed(Duration(seconds: 3));
+    //send all contacts
+    int contactsSynced = 0;
     if (listContactIds.length > 0) {
-      //send all contacts
-      int contactsSynced = 0;
       for (int id in listContactIds) {
         Contact contactUpdated = await _contactService.sendContact(id);
         await _storage.putContact(contactUpdated);
         contactsSynced++;
-        _synchronizingCtrl.add(SyncEvent(message:'$contactsSynced / ${listContactIds.length}', eventEnum: SyncEventEnum.ENDED));
+        _synchronizingCtrl.add(SyncEvent(
+            message: '$contactsSynced / ${listContactIds.length}',
+            eventEnum: SyncEventEnum.SYNCING));
         await Future.delayed(Duration(seconds: 3));
       }
     }
+    
+    _synchronizingCtrl.add(SyncEvent(
+        message: '$contactsSynced / ${listContactIds.length}',
+        eventEnum: SyncEventEnum.ENDED));
+    await Future.delayed(Duration(seconds: 3));
 
     // get all contacts that not already is in the device
     // List<String> ids = await _storage.getAllContactsIds();

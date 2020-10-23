@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../widgets/sync_progress/sync_progress_widget.dart';
+
 import 'config_modal_controller.dart';
 
 class ConfigModalWidget extends StatelessWidget {
@@ -37,7 +39,15 @@ class ConfigModalWidget extends StatelessWidget {
                   : RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50)),
-                      onPressed: controller.syncManually,
+                      onPressed: () {
+                        Modular.to.pop();
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => SyncProgressWidget(
+                                  startSync: true,
+                                ));
+                      },
                       color: Colors.indigoAccent,
                       textColor: Colors.white,
                       child: Padding(

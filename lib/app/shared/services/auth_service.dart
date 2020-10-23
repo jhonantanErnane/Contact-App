@@ -14,9 +14,7 @@ class AuthService extends Disposable {
   StreamSubscription _streamSubscription;
   User user;
   FirebaseUser firebaseUser;
-  String _token =
-      'eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlM2FlZWUyYjVjMDhjMGMyODFhNGZmN2RjMmRmOGIyMzgyOGQ1YzYiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9jb250YWN0LWFwcC01NjE1MiIsImF1ZCI6ImNvbnRhY3QtYXBwLTU2MTUyIiwiYXV0aF90aW1lIjoxNjAxNDI5OTI5LCJ1c2VyX2lkIjoiMHZienpxWmpTN2FmQmlwbHRIYnByM0hJeHA3MiIsInN1YiI6IjB2Ynp6cVpqUzdhZkJpcGx0SGJwcjNISXhwNzIiLCJpYXQiOjE2MDI5NjQwNzgsImV4cCI6MTYwMjk2NzY3OCwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6e30sInNpZ25faW5fcHJvdmlkZXIiOiJhbm9ueW1vdXMifX0.Sr_EUy7eEmldmsR7_bYRU5jFSbnAI774IEPzni_xG50fCNZ-QHe33QDJ-k59Ec-Qz5QNzb663Dt06dLKz3Ocy6DhuGf3ggAld0rVTgdcP-PWD3z6abNsaMQkol357-QkHP7kMzG-96c79Ch4fu7G0pocF8f0pdfmcgDD9Zu4OOwm6nsSwEh5MGKWz7sWRRz5dURBkY_dJ6pikKxb280gXCEi_p9KnQSyLckK1NOj5xlcVGaY-lXl-PDFArOUFKl0Mr857SJ1CwQLcJJmOLhmpLtcig15_49rpyP7GzH3AkTV-SByAy62737wRG6iUoXVRmnOdo9L5ZfkNIIdX1HSRw';
-
+  
   static AuthService get instance {
     if (_instance == null) {
       _instance = AuthService._();
@@ -50,13 +48,6 @@ class AuthService extends Disposable {
   Future<String> getToken() async {
     try {
       final idTokenResult = await firebaseUser.getIdToken();
-      if (idTokenResult.token.compareTo(_token) != 0) {
-        print('idTokenResult.token => ' + idTokenResult.token);
-        _token = idTokenResult.token;
-        print('_token => ' + _token);
-      } else {
-        print('======= token igual ========');
-      }
       return idTokenResult.token;
     } catch (e) {
       print(e);

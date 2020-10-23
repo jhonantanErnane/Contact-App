@@ -1,6 +1,8 @@
-import 'shared/services/contact_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
+
+import 'shared/widgets/sync_progress/sync_progress_controller.dart';
+import 'shared/services/contact_service.dart';
 import './app_controller.dart';
 import './modules/about/about_module.dart';
 import './modules/contact/contact_module.dart';
@@ -17,6 +19,7 @@ import 'shared/services/sync_service.dart';
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        $SyncProgressController,
         $ContactService,
         $SyncService,
         Bind((i) => AppController(), lazy: false),
