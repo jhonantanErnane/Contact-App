@@ -1,5 +1,8 @@
-import 'package:contact_app/app/shared/models/contact.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import '../models/contact.dart';
+import '../models/server_error.dart';
+import '../services/sync_log_service.dart';
 import '../custom_dio/custom_dio_builder/custom_dio_builder.dart';
 import '../repositories/repository_interface.dart';
 
@@ -8,6 +11,7 @@ part 'contact_service.g.dart';
 @Injectable()
 class ContactService extends Disposable {
   final _storage = Modular.get<ILocalRepository>();
+  final _syncLogService = Modular.get<SyncLogService>();
 
   Future<Contact> sendContact(int contactId) async {
     Contact contact = await _storage.getContact(contactId);
@@ -18,7 +22,7 @@ class ContactService extends Disposable {
         return await _putContact(contact);
       }
     } catch (e) {
-      return contact;
+      return null;
     }
   }
 
@@ -32,9 +36,12 @@ class ContactService extends Disposable {
           .run();
       return Contact.fromJson(resp.data);
     } catch (e) {
-      print(e);
-      throw Exception(
-          'Ops ocorreu um erro, ao sincronizar um contato, por favor tente novamente');
+      final serverError = ServerError.fromJson(e.response.data);
+      serverError.errorsMessage
+          .forEach((element) => _syncLogService.setSyncLog(element.message));
+      return null;
+      // throw Exception(
+      //     'Ops ocorreu um erro, ao sincronizar um contato, por favor tente novamente');
     }
   }
 

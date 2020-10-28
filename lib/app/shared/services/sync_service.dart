@@ -7,6 +7,7 @@ import '../models/sync_event_model.dart';
 import '../repositories/repository_interface.dart';
 import '../repositories/local_repository/local_repository_shared_preferences_service.dart';
 import 'contact_service.dart';
+import './sync_log_service.dart';
 
 part 'sync_service.g.dart';
 
@@ -16,6 +17,7 @@ class SyncService extends Disposable {
       Modular.get<LocalRepositorySharedPreferencesService>();
   final _storage = Modular.get<ILocalRepository>();
   final _contactService = Modular.get<ContactService>();
+  final _syncLogService = Modular.get<SyncLogService>();
 
   final _isSyncAutoCtrl = BehaviorSubject<bool>();
   final _synchronizingCtrl = BehaviorSubject<SyncEvent>();
@@ -26,8 +28,9 @@ class SyncService extends Disposable {
 
   bool _isSyncAuto;
 
-  Future<void> _init() async =>
-      setIsSyncAuto(await _localRepositoryService.getAutoSync());
+  Future<void> _init() async {
+    setIsSyncAuto(await _localRepositoryService.getAutoSync());
+  }
 
   Stream<bool> get isSyncAutoOut => _isSyncAutoCtrl.stream;
 
@@ -42,6 +45,7 @@ class SyncService extends Disposable {
   }
 
   Future<void> _synchronizing() async {
+    _syncLogService.clearSyncLog();
     _synchronizingCtrl.add(
         SyncEvent(message: 'Iniciou...', eventEnum: SyncEventEnum.STARTED));
     await Future.delayed(Duration(seconds: 3));
@@ -49,21 +53,26 @@ class SyncService extends Disposable {
     List<int> listContactIds = await _storage.getContactsNotSync();
     _synchronizingCtrl.add(SyncEvent(
         message: '${listContactIds.length} contatos a serem sincronizados...'));
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 3));
     //send all contacts
     int contactsSynced = 0;
+
     if (listContactIds.length > 0) {
       for (int id in listContactIds) {
         Contact contactUpdated = await _contactService.sendContact(id);
+        if (contactUpdated ==null) {
+          
+        } else {
         await _storage.putContact(contactUpdated);
+        }
         contactsSynced++;
         _synchronizingCtrl.add(SyncEvent(
             message: '$contactsSynced / ${listContactIds.length}',
             eventEnum: SyncEventEnum.SYNCING));
-        await Future.delayed(Duration(seconds: 3));
+        // await Future.delayed(Duration(seconds: 3));
       }
     }
-    
+
     _synchronizingCtrl.add(SyncEvent(
         message: '$contactsSynced / ${listContactIds.length}',
         eventEnum: SyncEventEnum.ENDED));

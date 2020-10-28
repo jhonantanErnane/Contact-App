@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../models/contact.dart';
 import '../repository_interface.dart';
-import 'package:sqflite/sqflite.dart';
+
+part 'local_repository_sqlite.g.dart';
 
 const String DBNAME = 'flutter_contacts.db';
 const int DBVERSION = 1;
@@ -24,10 +27,11 @@ const List<String> dbCreate = [
       webSite TEXT)'''
 ];
 
-class LocalStorageSqlite implements ILocalRepository {
+@Injectable(lazy: false)
+class LocalRepositorySqlite implements ILocalRepository {
   Completer<Database> _dbInstance = Completer<Database>();
 
-  LocalStorageSqlite() {
+  LocalRepositorySqlite() {
     _init();
   }
 

@@ -19,6 +19,21 @@ final $SyncProgressController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SyncProgressController on _SyncProgressControllerBase, Store {
+  final _$syncLogsAtom = Atom(name: '_SyncProgressControllerBase.syncLogs');
+
+  @override
+  ObservableStream<List<String>> get syncLogs {
+    _$syncLogsAtom.reportRead();
+    return super.syncLogs;
+  }
+
+  @override
+  set syncLogs(ObservableStream<List<String>> value) {
+    _$syncLogsAtom.reportWrite(value, super.syncLogs, () {
+      super.syncLogs = value;
+    });
+  }
+
   final _$messageAtom = Atom(name: '_SyncProgressControllerBase.message');
 
   @override
@@ -51,6 +66,7 @@ mixin _$SyncProgressController on _SyncProgressControllerBase, Store {
   @override
   String toString() {
     return '''
+syncLogs: ${syncLogs},
 message: ${message}
     ''';
   }

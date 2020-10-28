@@ -44,12 +44,8 @@ class CustomDrawerWidget extends StatelessWidget {
             ),
           ),
           Observer(builder: (_) {
-            if (controller.isloggedStream.value == null) {
-              return CircularProgressIndicator();
-            }
-
             final drawerTileList =
-                buildListOptions(controller.isloggedStream.value, _);
+                buildListOptions(controller.isloggedStream.value ?? false, _);
 
             return ListView.builder(
               shrinkWrap: true,

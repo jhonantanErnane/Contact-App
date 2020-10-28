@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../shared/services/sync_log_service.dart';
 import '../../models/sync_event_enum.dart';
 import '../../services/sync_service.dart';
 
@@ -12,12 +13,19 @@ class SyncProgressController = _SyncProgressControllerBase
 
 abstract class _SyncProgressControllerBase with Store {
   final _syncService = Modular.get<SyncService>();
+  final _syncLogService = Modular.get<SyncLogService>();
 
-  void init(bool startSync) {
+  Future<void> init(bool startSync) async {
     if (startSync) {
       startSyncManually();
     }
+
+     syncLogs =
+        ObservableStream(_syncLogService.syncLogOut, initialValue: []);
   }
+
+  @observable
+  ObservableStream<List<String>> syncLogs;
 
   @observable
   String message = '';
@@ -28,7 +36,6 @@ abstract class _SyncProgressControllerBase with Store {
       if (element.eventEnum != SyncEventEnum.ENDED) {
         return true;
       } else {
-        Modular.to.pop();
         return false;
       }
     }).listen(
