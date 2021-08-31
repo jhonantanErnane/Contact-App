@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'authentication.dart';
+import 'authentication_interceptor_dio.dart';
 
 const BASEURL = 'http://192.168.0.25:5001/contact-app-56152/us-central1/api';
 

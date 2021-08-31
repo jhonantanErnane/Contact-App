@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import '../../shared/services/auth_service.dart';
+import '../services/auth_service.dart';
 
 class AuthenticationInterceptorDio implements InterceptorsWrapper {
   final _authService = Modular.get<AuthService>();
